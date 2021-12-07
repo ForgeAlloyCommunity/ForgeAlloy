@@ -33,3 +33,17 @@ K:\git\ForgeNetworkingRemastered\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcorea
 K:\git\ForgeNetworkingRemastered\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.dll
 K:\git\ForgeNetworkingRemastered\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.pdb
 K:\git\ForgeNetworkingRemastered\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.genruntimeconfig.cache
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\bin\Debug\netcoreapp3.0\ForgeNatHolePunch.exe
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\bin\Debug\netcoreapp3.0\ForgeNatHolePunch.deps.json
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\bin\Debug\netcoreapp3.0\ForgeNatHolePunch.runtimeconfig.json
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\bin\Debug\netcoreapp3.0\ForgeNatHolePunch.runtimeconfig.dev.json
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\bin\Debug\netcoreapp3.0\ForgeNatHolePunch.dll
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\bin\Debug\netcoreapp3.0\ForgeNatHolePunch.pdb
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.csproj.AssemblyReference.cache
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.GeneratedMSBuildEditorConfig.editorconfig
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.AssemblyInfoInputs.cache
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.AssemblyInfo.cs
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.csproj.CoreCompileInputs.cache
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.dll
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.pdb
+C:\UnityProjects\ForgeAlloy\ForgeNatHolePunch\obj\Debug\netcoreapp3.0\ForgeNatHolePunch.genruntimeconfig.cache

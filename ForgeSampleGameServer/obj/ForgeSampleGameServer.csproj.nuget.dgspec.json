@@ -1,26 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "K:\\git\\ForgeNetworkingRemastered\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj": {}
+    "C:\\UnityProjects\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj": {}
   },
   "projects": {
-    "K:\\git\\ForgeNetworkingRemastered\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj": {
+    "C:\\UnityProjects\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "K:\\git\\ForgeNetworkingRemastered\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj",
+        "projectUniqueName": "C:\\UnityProjects\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj",
         "projectName": "ForgeSampleGameServer",
-        "projectPath": "K:\\git\\ForgeNetworkingRemastered\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj",
-        "packagesPath": "C:\\Users\\brent\\.nuget\\packages\\",
-        "outputPath": "K:\\git\\ForgeNetworkingRemastered\\ForgeAlloy\\ForgeSampleGameServer\\obj\\",
+        "projectPath": "C:\\UnityProjects\\ForgeAlloy\\ForgeSampleGameServer\\ForgeSampleGameServer.csproj",
+        "packagesPath": "C:\\Users\\tony\\.nuget\\packages\\",
+        "outputPath": "C:\\UnityProjects\\ForgeAlloy\\ForgeSampleGameServer\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\brent\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.0"
@@ -31,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp3.0": {
+            "targetAlias": "netcoreapp3.0",
             "projectReferences": {}
           }
         },
@@ -42,6 +38,7 @@
       },
       "frameworks": {
         "netcoreapp3.0": {
+          "targetAlias": "netcoreapp3.0",
           "imports": [
             "net461",
             "net462",
@@ -75,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

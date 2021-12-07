@@ -14,10 +14,11 @@ namespace ForgeTests.Networking.Messaging
 		public void AddMessage_ShouldExist()
 		{
 			var message = A.Fake<IMessage>();
+			var endpoint = A.Fake<EndPoint>();
 			message.Receipt = A.Fake<IMessageReceiptSignature>();
 			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			repo.AddMessage(message, A.Fake<EndPoint>());
-			Assert.IsTrue(repo.Exists(message.Receipt));
+			repo.AddMessage(message, endpoint);
+			Assert.IsTrue(repo.Exists(endpoint, message.Receipt));
 		}
 
 		[Test]
@@ -33,50 +34,54 @@ namespace ForgeTests.Networking.Messaging
 		public void AddMessageWithSameGuid_ShouldThrow()
 		{
 			var message = A.Fake<IMessage>();
+			var endpoint = A.Fake<EndPoint>();
 			message.Receipt = A.Fake<IMessageReceiptSignature>();
 			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			repo.AddMessage(message, A.Fake<EndPoint>());
-			Assert.Throws<MessageWithReceiptSignatureAlreadyExistsException>(() => repo.AddMessage(message, A.Fake<EndPoint>()));
+			repo.AddMessage(message, endpoint);
+			Assert.Throws<MessageWithReceiptSignatureAlreadyExistsException>(() => repo.AddMessage(message, endpoint));
 		}
 
 		[Test]
 		public void CheckForMessage_ShouldNotExist()
 		{
 			var fake = A.Fake<IMessageReceiptSignature>();
+			var endpoint = A.Fake<EndPoint>();
 			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			Assert.IsFalse(repo.Exists(fake));
+			Assert.IsFalse(repo.Exists(endpoint, fake));
 		}
 
 		[Test]
 		public void RemoveMessage_ShouldBeRemoved()
 		{
 			var message = A.Fake<IMessage>();
+			var endpoint = A.Fake<EndPoint>();
 			message.Receipt = A.Fake<IMessageReceiptSignature>();
 			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			repo.AddMessage(message, A.Fake<EndPoint>());
-			Assert.IsTrue(repo.Exists(message.Receipt));
-			repo.RemoveMessage(message.Receipt);
-			Assert.IsFalse(repo.Exists(message.Receipt));
-			repo.AddMessage(message, A.Fake<EndPoint>());
-			Assert.IsTrue(repo.Exists(message.Receipt));
-			repo.RemoveMessage(message);
-			Assert.IsFalse(repo.Exists(message.Receipt));
+			repo.AddMessage(message, endpoint);
+			Assert.IsTrue(repo.Exists(endpoint, message.Receipt));
+			repo.RemoveMessage(endpoint, message.Receipt);
+			Assert.IsFalse(repo.Exists(endpoint, message.Receipt));
+			repo.AddMessage(message, endpoint);
+			Assert.IsTrue(repo.Exists(endpoint, message.Receipt));
+			repo.RemoveMessage(endpoint, message);
+			Assert.IsFalse(repo.Exists(endpoint, message.Receipt));
 		}
 
 		[Test, MaxTime(1000)]
 		public void MessageAfterTTL_ShouldBeRemoved()
 		{
 			var message = A.Fake<IMessage>();
+			var endpoint = A.Fake<EndPoint>();
 			message.Receipt = A.Fake<IMessageReceiptSignature>();
 			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			repo.AddMessage(message, A.Fake<EndPoint>(), 3);
-			Assert.IsTrue(repo.Exists(message.Receipt));
+			repo.AddMessage(message, endpoint, 3);
+			Assert.IsTrue(repo.Exists(endpoint, message.Receipt));
 			Thread.Sleep(1);
-			Assert.IsTrue(repo.Exists(message.Receipt));
+			Assert.IsTrue(repo.Exists(endpoint, message.Receipt));
 			bool removed;
 			do
 			{
-				removed = repo.Exists(message.Receipt);
+				removed = repo.Exists(endpoint, message.Receipt);
 			} while (!removed);
 			Assert.IsTrue(removed);
 		}

@@ -13,7 +13,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 	[TestFixture]
 	public class MessageConstructorTests : ForgeNetworkingTest
 	{
-		private static BMSByte GetPageSection(BMSByte buffer, IPagenatedMessage pm, int pageNumber)
+		private static BMSByte GetPageSection(BMSByte buffer, IPaginatedMessage pm, int pageNumber)
 		{
 			var page = pm.Pages[pageNumber];
 			var pageBuffer = new BMSByte();
@@ -36,7 +36,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			}
 			var beforeBuffer = new BMSByte();
 			beforeBuffer.Clone(buffer);
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			IMessageConstructor constructor = bufferInterpreter.ReconstructPacketPage(pm.Buffer, A.Fake<EndPoint>());
 			Assert.IsTrue(constructor.MessageReconstructed);
 			Assert.AreEqual(beforeBuffer.Size, constructor.MessageBuffer.Size);
@@ -58,7 +58,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			}
 			var beforeBuffer = new BMSByte();
 			beforeBuffer.Clone(buffer);
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			IMessageConstructor constructor = bufferInterpreter.ReconstructPacketPage(pm.Buffer, A.Fake<EndPoint>());
 			Assert.IsTrue(constructor.MessageReconstructed);
 			Assert.AreEqual(beforeBuffer.Size, constructor.MessageBuffer.Size);
@@ -81,7 +81,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			}
 			var beforeBuffer = new BMSByte();
 			beforeBuffer.Clone(buffer);
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			IMessageConstructor constructor = null;
 			for (int i = 0; i < pm.Pages.Count; i++)
 			{
@@ -110,7 +110,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			}
 			var beforeBuffer = new BMSByte();
 			beforeBuffer.Clone(buffer);
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			IMessageConstructor constructor = null;
 			for (int i = 0; i < pm.Pages.Count; i++)
 			{
@@ -139,7 +139,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			}
 			var beforeBuffer = new BMSByte();
 			beforeBuffer.Clone(buffer);
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			IMessageConstructor constructor = null;
 			for (int i = 0; i < pm.Pages.Count; i++)
 			{
@@ -166,7 +166,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 				buffer[i] = (byte)(i % byte.MaxValue);
 			var beforeBuffer = new BMSByte();
 			beforeBuffer.Clone(buffer);
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			IMessageConstructor constructor = null;
 			int[] indexes = new int[pm.Pages.Count];
 			for (int i = 0; i < indexes.Length; i++)
@@ -202,7 +202,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			}
 			var beforeBuffer = new BMSByte();
 			beforeBuffer.Clone(buffer);
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			IMessageConstructor constructor = null;
 			for (int i = 0; i < pm.Pages.Count - 1; i++)
 			{

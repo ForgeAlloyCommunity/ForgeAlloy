@@ -19,7 +19,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			{
 				buffer[i] = (byte)(i % byte.MaxValue);
 			}
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			Assert.AreEqual(1, pm.Pages.Count);
 			Assert.AreEqual(buffer.Size, pm.TotalSize);
 			Assert.AreEqual(buffer, pm.Buffer);
@@ -39,7 +39,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			{
 				buffer[i] = (byte)(i % byte.MaxValue);
 			}
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			Assert.AreEqual(2, pm.Pages.Count);
 			Assert.AreEqual(buffer.Size, pm.TotalSize);
 			Assert.AreEqual(buffer, pm.Buffer);
@@ -61,7 +61,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			{
 				buffer[i] = (byte)(i % byte.MaxValue);
 			}
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			Assert.AreEqual(3, pm.Pages.Count);
 			Assert.AreEqual(buffer.Size, pm.TotalSize);
 			Assert.AreEqual(buffer, pm.Buffer);
@@ -84,7 +84,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			{
 				buffer[i] = (byte)(i % byte.MaxValue);
 			}
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			Assert.AreEqual(1, pm.Pages.Count);
 			Assert.AreEqual(buffer.Size, pm.TotalSize);
 			Assert.AreEqual(buffer, pm.Buffer);
@@ -104,7 +104,7 @@ namespace ForgeTests.Networking.Messaging.Paging
 			{
 				buffer[i] = (byte)(i % byte.MaxValue);
 			}
-			IPagenatedMessage pm = destructor.BreakdownMessage(buffer);
+			IPaginatedMessage pm = destructor.BreakdownMessage(buffer);
 			Assert.AreEqual(2, pm.Pages.Count);
 			Assert.AreEqual(buffer.Size, pm.TotalSize);
 			Assert.AreEqual(buffer, pm.Buffer);
