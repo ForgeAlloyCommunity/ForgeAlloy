@@ -36,12 +36,24 @@ namespace Forge.Networking.Sockets
 					CancellationSource.Token.ThrowIfCancellationRequested();
 					buffer.Clear();
 					ManagedSocket.Receive(buffer, ref readEp);
-					ProcessMessageRead(buffer, readEp);
+					try
+					{
+						ProcessMessageRead(buffer, readEp);
+					}
+					catch (Exception ex)
+                    {
+						networkMediator.EngineProxy.Logger.Log($"Unexpected ProcessMessageRead error: {ex.Message}");
+					}
 				}
 			}
 			catch (OperationCanceledException)
 			{
 				networkMediator.EngineProxy.Logger.Log("Cancelling the background network read task");
+
+			}
+			catch (Exception ex)
+            {
+				networkMediator.EngineProxy.Logger.Log($"Cancelling the background network read task. Unexpected: {ex.Message}");
 			}
 		}
 
