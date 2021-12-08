@@ -104,6 +104,17 @@ namespace Forge.Networking.Players
 		bool Exists(EndPoint endpoint);
 
 		/// <summary>
+		/// Should:  Look through the repository collection and find a player which has
+		/// an IPlayerSignature that has a matching IPlayerSignature::EndPoint with the supplied endpoint. If
+		/// one is located then this method should return true, otherwise return false
+		/// </summary>
+		/// <param name="id">
+		/// The endpoint that is matched against the player's IPlayerSignature::EndPoint
+		/// </param>
+		/// <returns>True if the player matching the id was found, otherwise false</returns>
+		bool Exists(IPlayerSignature id);
+
+		/// <summary>
 		/// Used to get the internal enumerator of the repository
 		/// so that client code is able to iterate through all players
 		/// </summary>
