@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj": {}
+    "C:\\UnityProjects\\ForgeAlloyFork\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj": {}
   },
   "projects": {
-    "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj": {
+    "C:\\UnityProjects\\ForgeAlloyFork\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
+        "projectUniqueName": "C:\\UnityProjects\\ForgeAlloyFork\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
         "projectName": "ForgeNatHolePunch",
-        "projectPath": "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
+        "projectPath": "C:\\UnityProjects\\ForgeAlloyFork\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
         "packagesPath": "C:\\Users\\tony\\.nuget\\packages\\",
-        "outputPath": "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\obj\\",
+        "outputPath": "C:\\UnityProjects\\ForgeAlloyFork\\ForgeNatHolePunch\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
