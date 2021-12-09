@@ -78,12 +78,14 @@ namespace Forge.Networking.Messaging
 		// Note:  This is called from the read thread without sync context
 		public void ReceiveMessageBuffer(ISocket readingSocket, EndPoint messageSender, BMSByte buffer)
 		{
+			int messageId = 0;
 			IMessageConstructor constructor = MessageBufferInterpreter.ReconstructPacketPage(buffer, messageSender);
 			if (constructor.MessageReconstructed)
 			{
 				try
 				{
-					var m = (IMessage)ForgeMessageCodes.Instantiate(constructor.MessageBuffer.GetBasicType<int>());
+					messageId = constructor.MessageBuffer.GetBasicType<int>();
+					var m = (IMessage)ForgeMessageCodes.Instantiate(messageId);
 					ProcessMessageSignature(readingSocket, messageSender, constructor.MessageBuffer, m);
 
 					if (m.Receipt != null)
@@ -107,7 +109,11 @@ namespace Forge.Networking.Messaging
 				}
 				catch (MessageCodeNotFoundException ex)
 				{
-					_networkMediator.EngineProxy.Logger.LogException(ex);
+					_networkMediator.EngineProxy.Logger.LogException(new System.Exception($"Message type not found [{messageId}] {ex.Message}"));
+				}
+				catch (System.Exception ex)
+				{
+					_networkMediator.EngineProxy.Logger.LogException(new System.Exception($"Problem processing Message Type [{messageId}] {ex.Message}"));
 				}
 				MessageBufferInterpreter.Release(constructor);
 			}
