@@ -74,6 +74,7 @@ namespace Forge.Networking.Messaging
 					kv = new Dictionary<IMessageReceiptSignature, IMessage>();
 					_messages.Add(sender, kv);
 				}
+				message.IsBuffered = true;
 				kv.Add(message.Receipt, message);
 			}
 		}
@@ -104,11 +105,24 @@ namespace Forge.Networking.Messaging
 
 		public void RemoveAllFor(EndPoint sender)
 		{
+			var copy = new List<IMessage>();
+
 			lock (_messages)
 			{
 				var removals = new List<IMessageReceiptSignature>();
+				if (_messages.TryGetValue(sender, out var kv))
+                {
+					foreach (var mkv in kv)
+						copy.Add(mkv.Value);
+				}
 				_messages.Remove(sender);
 			}
+
+			try
+			{
+				foreach (var m in copy) m.Unbuffered();
+			}
+			catch { }
 		}
 
 		public void RemoveMessage(EndPoint sender, IMessage message)
@@ -127,7 +141,14 @@ namespace Forge.Networking.Messaging
 			lock (_messages)
 			{
 				if (_messages.TryGetValue(sender, out var kv))
+				{
+					try
+					{
+						kv[receipt].Unbuffered();
+					}
+					catch { } // Catch just in case message already removed
 					kv.Remove(receipt);
+				}
 			}
 		}
 
