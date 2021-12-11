@@ -43,7 +43,9 @@ namespace Forge.Networking.Messaging
 		{
 			if (!_messageTypes.TryGetValue(code, out var type))
 				throw new MessageCodeNotFoundException(code);
-			return _messagePool.Get(type);
+			var message = _messagePool.Get(type);
+			((IMessage)message).Reset();
+			return message;
 		}
 
 		public static int GetCodeFromType(Type type)
@@ -52,6 +54,14 @@ namespace Forge.Networking.Messaging
 				throw new MessageTypeNotFoundException(type);
 			return code;
 		}
+
+		public static T Instantiate<T>()
+        {
+			int code = GetCodeFromType(typeof(T));
+			T message = (T)Instantiate(code);
+			((IMessage)message).Reset();
+			return message;
+        }
 
 		public static void Clear()
 		{
