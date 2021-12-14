@@ -57,8 +57,9 @@ namespace Forge.Networking.Messaging
 
 		public static T Instantiate<T>()
         {
-			int code = GetCodeFromType(typeof(T));
-			T message = (T)Instantiate(code);
+			if (!_messageCodes.ContainsKey(typeof(T)))
+				throw new MessageTypeNotFoundException(typeof(T));
+			T message = (T)_messagePool.Get(typeof(T));
 			((IMessage)message).Reset();
 			return message;
         }
