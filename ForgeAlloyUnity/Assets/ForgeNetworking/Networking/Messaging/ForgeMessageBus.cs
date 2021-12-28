@@ -91,7 +91,10 @@ namespace Forge.Networking.Messaging
 					if (m.Receipt != null)
 					{
 						if (_storedMessages.Exists(messageSender, m.Receipt))
+						{
+							m.Sent();
 							return;
+						}
 						_storedMessages.AddMessage(m, messageSender, _networkMediator.PlayerTimeout);
 					}
 
