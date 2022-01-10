@@ -62,9 +62,23 @@ namespace Forge.Networking.Messaging
 				ForgeSerializer.Instance.Serialize(false, buffer);
 			message.Serialize(buffer);
 			IPaginatedMessage pm = _messageDestructor.BreakdownMessage(buffer);
-			sender.Send(receiver, pm.Buffer);
+			//sender.Send(receiver, pm.Buffer);
+			for (int i = 0; i < pm.Pages.Count; i++)
+			{
+				BMSByte pageBuffer = GetPageSection(buffer, pm, i);
+				sender.Send(receiver, pageBuffer);
+				_bufferPool.Release(pageBuffer);
+			}
 			message.Sent();
 			_bufferPool.Release(buffer);
+		}
+
+		private BMSByte GetPageSection(BMSByte buffer, IPaginatedMessage pm, int pageNumber)
+		{
+			var page = pm.Pages[pageNumber];
+			var pageBuffer = _bufferPool.Get(page.Length);
+			pageBuffer.BlockCopy(buffer.byteArr, page.StartOffset, page.Length);
+			return pageBuffer;
 		}
 
 		public IMessageReceiptSignature SendReliableMessage(IMessage message, ISocket sender, EndPoint receiver)

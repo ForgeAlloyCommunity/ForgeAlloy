@@ -13,12 +13,18 @@ namespace Forge.Networking.Messaging.Paging
 
 		private BMSByte[] _pages = null;
 		private BMSBytePool _bufferPool = null;
+		public DateTime ttl { get; private set;}
+
+		// Time to live for messages being constructed
+		private const int c_ttlMilliseconds = 600;
+		TimeSpan ttlSpan = new TimeSpan(0, 0, 0, 0, c_ttlMilliseconds);
 
 		public void Setup(BMSBytePool bufferPool, int id)
 		{
 			_bufferPool = bufferPool;
 			MessageBuffer = _bufferPool.Get(1024);
 			Id = id;
+			ttl = DateTime.UtcNow + ttlSpan;
 		}
 
 		public void Teardown()

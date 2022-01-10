@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using Forge.Factory;
@@ -13,6 +14,8 @@ namespace Forge.Networking.Messaging.Paging
 
 		public IMessageConstructor ReconstructPacketPage(BMSByte buffer, EndPoint sender)
 		{
+			IMessageConstructor deadConstructor = null;
+
 			int messageId = buffer.GetBasicType<int>();
 			IMessageConstructor constructor = null;
 			if (_messageConstructors.TryGetValue(sender, out var constructors))
@@ -25,6 +28,13 @@ namespace Forge.Networking.Messaging.Paging
 						ContinueProcessingExistingConstructor(buffer, constructor, sender);
 						break;
 					}
+					else if (c.ttl < DateTime.UtcNow)
+						deadConstructor = c;
+				}
+
+				if (deadConstructor != null)
+				{
+					constructors.Remove(deadConstructor);
 				}
 			}
 
