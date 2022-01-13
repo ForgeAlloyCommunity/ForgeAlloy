@@ -64,6 +64,8 @@ namespace ForgeTests.Networking.Messaging
 		public void MessageSerialization_ShouldMatch()
 		{
 			var mediator = A.Fake<INetworkMediator>();
+			A.CallTo(() => mediator.PlayerTimeout).Returns(1);
+			A.CallTo(() => mediator.IsClient).Returns(true);
 			var receipt = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageReceiptSignature>();
 			receipt = null;
 
@@ -100,6 +102,7 @@ namespace ForgeTests.Networking.Messaging
 		{
 			var mediator = A.Fake<INetworkMediator>();
 			A.CallTo(() => mediator.PlayerTimeout).Returns(1);
+			A.CallTo(() => mediator.IsClient).Returns(true);
 			var tokenSource = new CancellationTokenSource();
 			A.CallTo(() => mediator.SocketFacade.CancellationSource).Returns(tokenSource);
 			var receipt = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageReceiptSignature>();
