@@ -12,5 +12,6 @@ namespace Forge.Networking.Messaging.Paging
 		void Setup(BMSBytePool bufferPool, int id);
 		void Teardown();
 		void ReconstructMessagePage(BMSByte page, EndPoint sender);
+		System.DateTime ttl { get; }
 	}
 }
