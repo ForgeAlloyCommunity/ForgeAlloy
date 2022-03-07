@@ -12,6 +12,6 @@ namespace Forge.Networking.Messaging
 		IMessageReceiptSignature SendReliableMessage(IMessage message, ISocket sender, EndPoint receiver);
 		void ReceiveMessageBuffer(ISocket readingSocket, EndPoint messageSender, BMSByte messageBuffer);
 		void SetMediator(INetworkMediator mediator);
-		void MessageConfirmed(EndPoint sender, IMessageReceiptSignature messageReceipt);
+		void MessageConfirmed(EndPoint sender, IMessageReceiptSignature messageReceipt, ushort recentPackets);
 	}
 }

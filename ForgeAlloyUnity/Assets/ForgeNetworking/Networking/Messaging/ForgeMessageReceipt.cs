@@ -9,5 +9,10 @@ namespace Forge.Networking.Messaging
 		{
 
 		}
+
+		public void Init(ISignatureGenerator<int> generator)
+		{
+			_id = generator.Generate();
+		}
 	}
 }

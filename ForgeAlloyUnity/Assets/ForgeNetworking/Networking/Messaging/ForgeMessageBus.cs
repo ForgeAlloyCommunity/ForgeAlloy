@@ -154,17 +154,18 @@ namespace Forge.Networking.Messaging
 			var sig = ForgeSerializer.Instance.Deserialize<IMessageReceiptSignature>(buffer);
 			if (sig != null)
 			{
-				m.Receipt = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageReceiptSignature>();
+				//m.Receipt = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageReceiptSignature>();
 				m.Receipt = sig;
 				ForgeReceiptAcknowledgementMessage ack = _msgAckPool.Get();
 				ack.ReceiptSignature = sig;
+				ack.RecentPackets = _storedMessages.ProcessReliableSignature(messageSender, sig.GetHashCode());
 				SendMessage(ack, readingSocket, messageSender);
 			}
 		}
 
-		public void MessageConfirmed(EndPoint sender, IMessageReceiptSignature messageReceipt)
+		public void MessageConfirmed(EndPoint sender, IMessageReceiptSignature messageReceipt, ushort recentPackets)
 		{
-			_messageRepeater.RemoveRepeatingMessage(sender, messageReceipt);
+			_messageRepeater.RemoveRepeatingMessage(sender, messageReceipt, recentPackets);
 		}
 	}
 }

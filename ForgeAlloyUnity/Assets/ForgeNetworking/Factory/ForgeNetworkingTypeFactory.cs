@@ -39,6 +39,10 @@ namespace Forge.Factory
 
 			Register<IChallengeMessage, ForgeConnectChallengeMessage>();
 			Register<IChallengeResponseMessage, ForgeConnectChallengeResponseMessage>();
+
+			Register<ISignatureGenerator<int>, ForgeSignatureIdGenerator>();
+			Register<IForgeEndpointRepeater, ForgeEndpointRepeater>();
+
 		}
 	}
 }

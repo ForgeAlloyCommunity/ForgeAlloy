@@ -4,7 +4,7 @@ namespace Forge.DataStructures
 {
 	public class ForgeSignature : ISignature
 	{
-		private int _id;
+		protected int _id;
 
 		public ForgeSignature(ISignatureGenerator<int> generator)
 		{

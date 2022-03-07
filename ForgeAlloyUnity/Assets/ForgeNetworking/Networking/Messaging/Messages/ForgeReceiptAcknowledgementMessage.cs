@@ -7,16 +7,19 @@ namespace Forge.Networking.Messaging.Messages
 	public class ForgeReceiptAcknowledgementMessage : ForgeMessage
 	{
 		public IMessageReceiptSignature ReceiptSignature { get; set; }
+		public ushort RecentPackets { get; set; }
 		public override IMessageInterpreter Interpreter => new ForgeReceiptAcknowledgementInterpreter();
 
 		public override void Deserialize(BMSByte buffer)
 		{
 			ReceiptSignature = ForgeSerializer.Instance.Deserialize<IMessageReceiptSignature>(buffer);
+			RecentPackets = ForgeSerializer.Instance.Deserialize<ushort>(buffer);
 		}
 
 		public override void Serialize(BMSByte buffer)
 		{
 			ForgeSerializer.Instance.Serialize(ReceiptSignature, buffer);
+			ForgeSerializer.Instance.Serialize(RecentPackets, buffer);
 		}
 	}
 }

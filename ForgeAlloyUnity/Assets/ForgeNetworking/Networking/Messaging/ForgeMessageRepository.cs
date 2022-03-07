@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Forge.Factory;
 
 namespace Forge.Networking.Messaging
 {
@@ -10,16 +11,24 @@ namespace Forge.Networking.Messaging
 	{
 		private CancellationTokenSource _ttlBackgroundToken;
 
-		private struct StoredMessage
+		private struct StoredTTLMessage
 		{
 			public DateTime ttl;
 			public IMessage message;
 			public EndPoint sender;
 		}
+		private struct StoredMessage
+		{
+			public DateTime TimeSent;
+			public DateTime TimeResend;
+			public IMessage message;
+		}
 
-		private readonly List<StoredMessage> _messagesWithTTL = new List<StoredMessage>();
-		private readonly Dictionary<EndPoint, Dictionary<IMessageReceiptSignature, IMessage>> _messages = new Dictionary<EndPoint, Dictionary<IMessageReceiptSignature, IMessage>>();
-
+		private readonly List<StoredTTLMessage> _messagesWithTTL = new List<StoredTTLMessage>();
+		private readonly Dictionary<EndPoint, Dictionary<IMessageReceiptSignature, StoredMessage>> _messages = new Dictionary<EndPoint, Dictionary<IMessageReceiptSignature, StoredMessage>>();
+		private Dictionary<EndPoint, IForgeEndpointRepeater> _endpointRepeater = new Dictionary<EndPoint, IForgeEndpointRepeater>();
+		private double ResendPingMultiplier = 1.1;
+		private double ResendMin = 50;
 		public void Clear()
 		{
 			_ttlBackgroundToken.Cancel();
@@ -47,7 +56,7 @@ namespace Forge.Networking.Messaging
 						{
 							if (_messagesWithTTL[i].ttl <= now)
 							{
-								RemoveFromMessageLookup(_messagesWithTTL[i].sender, _messagesWithTTL[i].message.Receipt);
+								RemoveFromMessageLookup(_messagesWithTTL[i].sender, _messagesWithTTL[i].message.Receipt, false);
 								_messagesWithTTL.RemoveAt(i--);
 							}
 						}
@@ -61,6 +70,12 @@ namespace Forge.Networking.Messaging
 			catch (OperationCanceledException) { }
 		}
 
+		public void AddMessageSend(IMessage message, EndPoint receiver)
+		{
+			message.Receipt = GetNewMessageReceipt(receiver);
+			AddMessage(message, receiver);
+		}
+
 		public void AddMessage(IMessage message, EndPoint sender)
 		{
 			if (message.Receipt == null)
@@ -71,12 +86,28 @@ namespace Forge.Networking.Messaging
 			{
 				if (!_messages.TryGetValue(sender, out var kv))
 				{
-					kv = new Dictionary<IMessageReceiptSignature, IMessage>();
+					kv = new Dictionary<IMessageReceiptSignature, StoredMessage>();
 					_messages.Add(sender, kv);
 				}
+				if (!_endpointRepeater.ContainsKey(sender))
+				{
+					_endpointRepeater.Add(sender, AbstractFactory.Get<INetworkTypeFactory>().GetNew<IForgeEndpointRepeater>());
+				}
 				message.IsBuffered = true;
-				kv.Add(message.Receipt, message);
+				double resendDelay = Math.Max((double)_endpointRepeater[sender].Ping * ResendPingMultiplier, ResendMin);
+				kv.Add(message.Receipt, new StoredMessage
+				{
+					TimeSent = DateTime.UtcNow,
+					TimeResend = DateTime.UtcNow.AddMilliseconds(resendDelay),
+					message = message
+				});
 			}
+		}
+
+		public void AddMessageSend(IMessage message, EndPoint receiver, int ttlMilliseconds)
+		{
+			message.Receipt = GetNewMessageReceipt(receiver);
+			AddMessage(message, receiver, ttlMilliseconds);
 		}
 
 		public void AddMessage(IMessage message, EndPoint sender, int ttlMilliseconds)
@@ -89,7 +120,7 @@ namespace Forge.Networking.Messaging
 			var now = DateTime.UtcNow;
 			lock (_messagesWithTTL)
 			{
-				_messagesWithTTL.Add(new StoredMessage
+				_messagesWithTTL.Add(new StoredTTLMessage
 				{
 					ttl = now + span,
 					message = message,
@@ -113,7 +144,7 @@ namespace Forge.Networking.Messaging
 				if (_messages.TryGetValue(sender, out var kv))
                 {
 					foreach (var mkv in kv)
-						copy.Add(mkv.Value);
+						copy.Add(mkv.Value.message);
 				}
 				_messages.Remove(sender);
 			}
@@ -121,6 +152,7 @@ namespace Forge.Networking.Messaging
 			try
 			{
 				foreach (var m in copy) m.Unbuffered();
+				_endpointRepeater.Remove(sender);
 			}
 			catch { }
 		}
@@ -130,13 +162,29 @@ namespace Forge.Networking.Messaging
 			RemoveMessage(sender, message.Receipt);
 		}
 
-		public void RemoveMessage(EndPoint sender, IMessageReceiptSignature guid)
+		public void RemoveMessage(EndPoint sender, IMessageReceiptSignature sig)
 		{
-			RemoveFromMessageLookup(sender, guid);
-			RemoveFromTTLWithGuid(guid);
+			RemoveFromMessageLookup(sender, sig);
 		}
 
-		private void RemoveFromMessageLookup(EndPoint sender, IMessageReceiptSignature receipt)
+
+		public void RemoveMessage(EndPoint sender, IMessageReceiptSignature receipt, ushort recentPackets)
+		{
+			RemoveFromMessageLookup(sender, receipt);
+
+			// Remove recent messages if in buffer
+			for (int i = 1; i <= 16; ++i)
+			{
+				if ((recentPackets & 1) != 0)
+				{
+					int hash = (receipt.GetHashCode() - i);
+					RemoveFromMessageLookup(sender, hash);
+				}
+				recentPackets >>= 1;
+			}
+		}
+
+		private void RemoveFromMessageLookup(EndPoint sender, IMessageReceiptSignature receipt, bool updatePing = true)
 		{
 			lock (_messages)
 			{
@@ -144,13 +192,48 @@ namespace Forge.Networking.Messaging
 				{
 					try
 					{
-						kv[receipt].Unbuffered();
+						if (updatePing)
+							_endpointRepeater[sender]?.AddPing(
+								(int)((DateTime.UtcNow - kv[receipt].TimeSent).TotalMilliseconds));
+						kv[receipt].message.Unbuffered();
+						kv.Remove(receipt);
 					}
 					catch { } // Catch just in case message already removed
 					kv.Remove(receipt);
 				}
 			}
+
+			RemoveFromTTL(receipt);
+
 		}
+
+		private void RemoveFromMessageLookup(EndPoint sender, int hash)
+		{
+			lock (_messages)
+			{
+				if (_messages.TryGetValue(sender, out var kv))
+				{
+					try
+					{
+						IMessageReceiptSignature sig = null;
+						foreach (var m in kv)
+						{
+							if (m.Key.GetHashCode() == hash)
+							{
+								sig = m.Key;
+								break;
+							}
+						}
+						if (sig != null)
+						{
+							RemoveFromMessageLookup(sender, sig, false);
+						}
+					}
+					catch { } // just in case
+				}
+			}
+		}
+
 
 		public bool Exists(EndPoint sender, IMessageReceiptSignature receipt)
 		{
@@ -163,16 +246,19 @@ namespace Forge.Networking.Messaging
 			return exists;
 		}
 
-		private void RemoveFromTTLWithGuid(IMessageReceiptSignature receipt)
+		private void RemoveFromTTL(IMessageReceiptSignature receipt)
 		{
 			lock (_messagesWithTTL)
 			{
 				for (int i = 0; i < _messagesWithTTL.Count; i++)
 				{
-					if (_messagesWithTTL[i].message.Receipt.Equals(receipt))
+					if (_messagesWithTTL[i].message.Receipt != null) // find out why this happens
 					{
-						_messagesWithTTL.RemoveAt(i);
-						break;
+						if (_messagesWithTTL[i].message.Receipt.Equals(receipt))
+						{
+							_messagesWithTTL.RemoveAt(i);
+							break;
+						}
 					}
 				}
 			}
@@ -187,11 +273,45 @@ namespace Forge.Networking.Messaging
 				foreach (var kv in _messages)
 				{
 					foreach (var mkv in kv.Value)
-						copy.Add(new KeyValuePair<EndPoint, IMessage>(kv.Key, mkv.Value));
+					{
+						if (mkv.Value.TimeResend < DateTime.UtcNow)
+						{
+							copy.Add(new KeyValuePair<EndPoint, IMessage>(kv.Key, mkv.Value.message));
+						}
+					}
 				}
 			}
 			foreach (var kv in copy)
-				iterator(kv.Key, kv.Value);
+			{
+				try
+				{
+					iterator(kv.Key, kv.Value);
+				}
+				catch { } // Ignore error when client disconnects
+			}
+		}
+
+		public int GetMessageCount()
+		{
+			return _messages.Count;
+		}
+
+		public ushort ProcessReliableSignature(EndPoint sender, int id)
+		{
+			if (!_endpointRepeater.ContainsKey(sender))
+			{
+				_endpointRepeater.Add(sender, AbstractFactory.Get<INetworkTypeFactory>().GetNew<IForgeEndpointRepeater>());
+			}
+			return _endpointRepeater[sender].ProcessReliableSignature(id);
+		}
+
+		private IMessageReceiptSignature GetNewMessageReceipt(EndPoint receiver)
+		{
+			if (!_endpointRepeater.ContainsKey(receiver))
+			{
+				_endpointRepeater.Add(receiver, AbstractFactory.Get<INetworkTypeFactory>().GetNew<IForgeEndpointRepeater>());
+			}
+			return _endpointRepeater[receiver].GetNewMessageReceipt();
 		}
 	}
 }
