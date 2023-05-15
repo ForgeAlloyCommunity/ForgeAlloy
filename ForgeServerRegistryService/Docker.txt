@@ -1,0 +1,31 @@
+Instructions for creating a docker container
+
+Preperations:
+
+You will need:
+-  .NET SDK version 6.0 or later. Download .NET SDK.
+-  Docker running locally. 
+-  Visual Studio or other IDE
+
+Follow this guide: https://docs.docker.com/language/dotnet/build-images/
+
+
+Build:
+
+1. Remove the Forge Project references
+2. Rebuild the Forge project
+3. copy the Forge.dll into ForgeServerREgistryService/Refs
+4. Add reference to the copied Forge.dll
+5. Open a command prompt at: /ForgeAlloy
+6. Run: docker build --tag forgeserverregistryservice .
+
+Once you are done, remove the reference to Forge.dll and restore reference to the Forge project.
+Change the project references is a hack, because I couldn't work out how to configure the
+Dockerfile to include the Forge project.
+
+Execute:
+
+To execute, run with the -p option to port forward the appropriate port.
+Use the UDP suffix if appropriate
+
+docker run -p 15940:15940/udp -d forgeserverregistryservice

@@ -64,5 +64,10 @@ namespace Forge.Networking.Sockets
 			byte[] portBytes = BitConverter.GetBytes(((IPEndPoint)EndPoint).Port);
 			_socket.SendTo(portBytes, 0, portBytes.Length, SocketFlags.None, target.EndPoint);
 		}
+
+		public new IPEndPoint GetEndpoint(string address, ushort port)
+		{
+			return CommonSocketBase.GetEndpoint(address, port);
+		}
 	}
 }

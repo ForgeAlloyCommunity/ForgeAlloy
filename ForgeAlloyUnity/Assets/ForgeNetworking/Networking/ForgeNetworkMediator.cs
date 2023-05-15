@@ -18,6 +18,8 @@ namespace Forge.Networking
 		public bool IsServer => SocketFacade is ISocketServerFacade;
 
 		private readonly IPlayerTimeoutBridge _timeoutBridge;
+		public int MaxPlayers { get; private set; }
+		public string ServerName { get; private set; }
 
 		public ForgeNetworkMediator()
 		{
@@ -33,9 +35,20 @@ namespace Forge.Networking
 
 		public void StartServer(ushort port, int maxPlayers)
 		{
+			StartServerWithRegistration(port, maxPlayers, "", 0, "");
+		}
+
+		public void StartServerWithRegistration(ushort port, int maxPlayers, string registrationServerAddress, ushort registrationServerPort, string serverName)
+		{
+			MaxPlayers = maxPlayers;
+			ServerName = serverName;
+
 			var server = AbstractFactory.Get<INetworkTypeFactory>().GetNew<ISocketServerFacade>();
 			SocketFacade = server;
-			server.StartServer(port, maxPlayers, this);
+			if (string.IsNullOrEmpty(registrationServerAddress))
+				server.StartServer(port, maxPlayers, this);
+			else
+				server.StartServerWithRegistration(port, maxPlayers, this, registrationServerAddress, registrationServerPort, serverName);
 			_timeoutBridge.StartWatching(this);
 			EngineProxy.NetworkingEstablished();
 			MessageBus.SetMediator(this);

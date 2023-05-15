@@ -1,8 +1,9 @@
 ﻿using Forge.Engine;
 
-namespace ForgeServerRegistryService.Engine
+
+namespace ForgeSampleGameServer.Engine
 {
-	public class ServerRegistryEngine : IEngineProxy
+	public  class SampleRegistryEngine : IEngineProxy
 	{
 		private IForgeLogger logger = new ForgeConsoleLogger();
 		public IForgeLogger Logger => logger;

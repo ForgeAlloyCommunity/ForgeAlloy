@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeServerRegistryService\\ForgeServerRegistryService.csproj": {}
+    "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeSampleGame\\ForgeSampleGame\\ForgeSampleGame.csproj": {}
   },
   "projects": {
     "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\Forge.csproj": {
@@ -67,14 +67,14 @@
         }
       }
     },
-    "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeServerRegistryService\\ForgeServerRegistryService.csproj": {
+    "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeSampleGame\\ForgeSampleGame\\ForgeSampleGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeServerRegistryService\\ForgeServerRegistryService.csproj",
-        "projectName": "ForgeServerRegistryService",
-        "projectPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeServerRegistryService\\ForgeServerRegistryService.csproj",
+        "projectUniqueName": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeSampleGame\\ForgeSampleGame\\ForgeSampleGame.csproj",
+        "projectName": "ForgeSampleGame",
+        "projectPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeSampleGame\\ForgeSampleGame\\ForgeSampleGame.csproj",
         "packagesPath": "C:\\Users\\tony\\.nuget\\packages\\",
-        "outputPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeServerRegistryService\\obj\\",
+        "outputPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeSampleGame\\ForgeSampleGame\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -85,7 +85,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net7.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -93,8 +93,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net7.0": {
+            "targetAlias": "net7.0",
             "projectReferences": {
               "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\Forge.csproj": {
                 "projectPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\Forge.csproj"
@@ -109,8 +109,8 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net7.0": {
+          "targetAlias": "net7.0",
           "imports": [
             "net461",
             "net462",
