@@ -31,12 +31,13 @@ namespace ForgeServerRegistryService.Messaging.Interpreters
 				{
 					while (e.MoveNext())
 					{
-						var player = (NetworkPlayer)e.Current;
+						var player = (RegisteredServer)e.Current;
 						if (player.IsRegisteredServer)
 						{
 							var ep = (IPEndPoint)player.EndPoint;
 							entries.Add(new ServerListingEntry
 							{
+								Name = player.Name,
 								Address = ep.Address.ToString(),
 								Port = (ushort)ep.Port
 							});

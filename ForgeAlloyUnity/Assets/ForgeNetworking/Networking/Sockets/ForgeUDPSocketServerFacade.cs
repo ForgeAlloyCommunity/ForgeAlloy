@@ -17,7 +17,7 @@ namespace Forge.Networking.Sockets
 
 		private readonly IServerSocket _socket;
 		public override ISocket ManagedSocket => _socket;
-
+		private RegistryPinger _registryPinger;
 		public IPlayerSignature NetPlayerId { get; set; }
 
 		private readonly List<EndPoint> _bannedEndpoints = new List<EndPoint>();
@@ -37,6 +37,13 @@ namespace Forge.Networking.Sockets
 			CancellationSource = new CancellationTokenSource();
 			NetPlayerId = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IPlayerSignature>();
 			Task.Run(ReadNetwork, CancellationSource.Token);
+		}
+
+		public void StartServerWithRegistration(ushort port, int maxPlayers, INetworkMediator netMediator, string registrationServerAddress, ushort registrationServerPort, string serverName)
+		{
+			StartServer(port, maxPlayers, netMediator);
+			_registryPinger = new RegistryPinger();
+			_registryPinger.StartPinging(netMediator, _socket.GetEndpoint(registrationServerAddress, registrationServerPort));
 		}
 
 		public override void ShutDown()
@@ -77,7 +84,9 @@ namespace Forge.Networking.Sockets
 			{
 				CleanupOldChallengedPlayers();
 				if (!_challengedPlayers.Exists(sender))
+				{
 					synchronizationContext.Post(CreatePlayer, sender);
+				}
 				else
 					ProcessPlayerMessageRead(_challengedPlayers.GetPlayer(sender), buffer);
 			}

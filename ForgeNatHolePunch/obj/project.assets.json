@@ -1,26 +1,50 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.0": {}
+    ".NETCoreApp,Version=v3.0": {
+      "Forge/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Forge.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Forge.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Forge/1.0.0": {
+      "type": "project",
+      "path": "../Forge.csproj",
+      "msbuildProject": "../Forge.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.0": []
+    ".NETCoreApp,Version=v3.0": [
+      "Forge >= 1.0.0"
+    ]
   },
   "packageFolders": {
-    "C:\\Users\\tony\\.nuget\\packages\\": {}
+    "C:\\Users\\tony\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
+      "projectUniqueName": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
       "projectName": "ForgeNatHolePunch",
-      "projectPath": "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
+      "projectPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeNatHolePunch\\ForgeNatHolePunch.csproj",
       "packagesPath": "C:\\Users\\tony\\.nuget\\packages\\",
-      "outputPath": "C:\\UnityProjects\\ForgeAlloy\\ForgeNatHolePunch\\obj\\",
+      "outputPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\ForgeNatHolePunch\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
         "C:\\Users\\tony\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -28,12 +52,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.0": {
           "targetAlias": "netcoreapp3.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\Forge.csproj": {
+              "projectPath": "D:\\UnityProjects\\ForgeAlloyNat\\ForgeAlloy\\Forge.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -51,7 +80,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -78,7 +108,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
       }
     }
   }

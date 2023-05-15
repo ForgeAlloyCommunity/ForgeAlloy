@@ -17,6 +17,7 @@ namespace Forge.Networking
 		bool IsServer { get; }
 		void ChangeEngineProxy(IEngineProxy engineProxy);
 		void StartServer(ushort port, int maxPlayers);
+		void StartServerWithRegistration(ushort port, int maxPlayers, string registrationServerAddress, ushort registrationServerPort, string serverName);
 		void StartClient(string hostAddress, ushort port);
 		void SendMessage(IMessage message);
 		void SendMessage(IMessage message, INetPlayer player);
@@ -24,5 +25,7 @@ namespace Forge.Networking
 		void SendReliableMessage(IMessage message);
 		void SendReliableMessage(IMessage message, INetPlayer player);
 		void SendReliableMessage(IMessage message, EndPoint endpoint);
+		int MaxPlayers { get; }
+		string ServerName { get; }
 	}
 }

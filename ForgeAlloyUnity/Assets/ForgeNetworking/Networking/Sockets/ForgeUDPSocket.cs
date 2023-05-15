@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using Forge.Serialization;
 
@@ -50,6 +50,11 @@ namespace Forge.Networking.Sockets
 		{
 			int offset = 0;
 			_socket.SendTo(buffer.byteArr, offset, buffer.Size, SocketFlags.None, endpoint);
+		}
+
+		public new IPEndPoint GetEndpoint(string address, ushort port)
+		{
+			return CommonSocketBase.GetEndpoint(address, port);
 		}
 	}
 }

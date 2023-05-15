@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forge", "Forge.csproj", "{94DAE1FF-AA9A-42DA-8327-F2C3C0AD1539}"
 EndProject
@@ -14,9 +14,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeServerRegistryService"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeTests", "ForgeTests\ForgeTests.csproj", "{B298E544-73B4-4B35-AE4E-2F1CBD83488A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeSampleGameServer", "ForgeSampleGameServer\ForgeSampleGameServer.csproj", "{80FC5FB2-047E-4B62-AEF7-A4FE8640B0E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeSampleGameServer", "ForgeSampleGameServer\ForgeSampleGameServer.csproj", "{80FC5FB2-047E-4B62-AEF7-A4FE8640B0E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeNatHolePunch", "ForgeNatHolePunch\ForgeNatHolePunch.csproj", "{5B81490F-3EBC-42B2-8D48-88B30FB6C28C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeNatHolePunch", "ForgeNatHolePunch\ForgeNatHolePunch.csproj", "{5B81490F-3EBC-42B2-8D48-88B30FB6C28C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeSampleGame", "ForgeSampleGame\ForgeSampleGame.csproj", "{5CEDFC34-6421-492F-961C-BE296C4E9253}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{5B81490F-3EBC-42B2-8D48-88B30FB6C28C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B81490F-3EBC-42B2-8D48-88B30FB6C28C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B81490F-3EBC-42B2-8D48-88B30FB6C28C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CEDFC34-6421-492F-961C-BE296C4E9253}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CEDFC34-6421-492F-961C-BE296C4E9253}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CEDFC34-6421-492F-961C-BE296C4E9253}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CEDFC34-6421-492F-961C-BE296C4E9253}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
