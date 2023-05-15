@@ -11,7 +11,7 @@ namespace Forge.Networking.Messaging.Interpreters
 		public void Interpret(INetworkMediator netHost, EndPoint sender, IMessage message)
 		{
 			var m = (ForgeReceiptAcknowledgementMessage)message;
-			netHost.MessageBus.MessageConfirmed(sender, m.ReceiptSignature);
+			netHost.MessageBus.MessageConfirmed(sender, m.ReceiptSignature, m.RecentPackets);
 			m.Sent();
 		}
 	}
