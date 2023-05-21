@@ -17,4 +17,19 @@ namespace Forge.Networking.Players
 
 		}
 	}
+	public class PlayerAlreadyExistsException : Exception
+	{
+		public PlayerAlreadyExistsException(IPlayerSignature id)
+			: base($"A player with the id {id} could not be found in the repository")
+		{
+
+		}
+
+		public PlayerAlreadyExistsException(EndPoint ep)
+			: base($"A player with the endpoint {ep} could not be found in the repository")
+		{
+
+		}
+	}
+
 }

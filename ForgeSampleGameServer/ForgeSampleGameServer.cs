@@ -1,17 +1,16 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Text;
 using Forge;
 using Forge.Factory;
 using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
 using Forge.Networking;
-using Forge.Networking.Messaging;
-using Forge.Networking.Messaging.Messages;
 using Forge.Networking.Players;
+using Forge.Networking.Sockets;
 using Forge.Networking.Utilities;
-using Forge.ServerRegistry.Messaging.Messages;
+using Forge.Serialization.Serializers;
+using Forge.ServerRegistry.Messaging.Interpreters;
 using ForgeSampleGameServer.Engine;
+using ForgeSampleGameServer.Messaging.Interpreters;
 
 namespace ForgeSampleGameServer
 {
@@ -26,6 +25,8 @@ namespace ForgeSampleGameServer
 		private static ushort serverPort;
 		private static string registryServerAddress;
 		private static string serverName;
+
+		public static string ServerName => serverName;
 
 		internal static void Main(string[] args)
 		{
@@ -42,6 +43,7 @@ namespace ForgeSampleGameServer
 
 			ForgeRegistration.Initialize();
 			var factory = AbstractFactory.Get<INetworkTypeFactory>();
+			factory.Register<IServerHolePunchInterpreter, ServerHolePunchInterpreter>();
 
 			var serverMediator = factory.GetNew<INetworkMediator>();
 			serverMediator.PlayerRepository.onPlayerAddedSubscription += OnPlayerAdded;
@@ -49,6 +51,7 @@ namespace ForgeSampleGameServer
 			serverMediator.ChangeEngineProxy(new SampleGameServerEngine());
 			serverMediator.StartServerWithRegistration(serverPort, 100, registryServerAddress, GlobalConst.defaultRegistryPort, serverName);
 			Console.WriteLine("Server Started...");
+
 
 			// Run Game Server on main thread with active synchronisation context
 			context.Run((object obj) =>

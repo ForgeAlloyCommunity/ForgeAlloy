@@ -25,7 +25,7 @@ namespace ForgeSampleGameServer.Messaging.Interpreters
 			// i.e. Punch a hole
 			var holePunchMessage = ForgeMessageCodes.Instantiate<ForgeClientHolePunchMessage>();
 			holePunchMessage.ServerName = ForgeSampleGameServer.ServerName;
-			netContainer.SendMessage(holePunchMessage, clientEndPoint);
+			netContainer.SendReliableMessage(holePunchMessage, clientEndPoint);
 
 			//BMSByte buffer = new BMSByte();
 			//buffer.Append(new byte[] { 1 });

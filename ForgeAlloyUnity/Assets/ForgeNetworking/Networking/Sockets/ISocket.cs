@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using Forge.Serialization;
 
 namespace Forge.Networking.Sockets
@@ -41,6 +41,14 @@ namespace Forge.Networking.Sockets
 		/// </param>
 		/// <returns>The number of bytes recieved through this socket handle</returns>
 		int Receive(BMSByte buffer, ref EndPoint endpoint);
+
+		/// <summary>
+		/// Helper function to create an IPEndPoint
+		/// </summary>
+		/// <param name="address"></param>
+		/// <param name="port"></param>
+		/// <returns></returns>
+		IPEndPoint GetEndpoint(string address, ushort port);
 
 		/// <summary>
 		/// Should:  Do any cleanup on the ISocket implementation required, this is useful

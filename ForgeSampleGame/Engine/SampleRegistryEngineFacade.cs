@@ -12,6 +12,7 @@ namespace ForgeSampleGameServer.Engine
 	{
 		private IForgeLogger logger = new ForgeConsoleLogger();
 		public IForgeLogger Logger => logger;
+		public string Id => "SampleRegistryClient";
 
 		public INetworkMediator NetworkMediator { get; set; }
 		private ISocketFacade _selfSocket => NetworkMediator.SocketFacade;
@@ -59,5 +60,9 @@ namespace ForgeSampleGameServer.Engine
 			return;
 		}
 
+		public bool CanConnectToChallenge()
+		{
+			return true;
+		}
 	}
 }

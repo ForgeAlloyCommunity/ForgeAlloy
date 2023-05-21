@@ -59,7 +59,10 @@ namespace Forge.Networking.Players
 						_previousPlayerSet.Add(itr.Current);
 				}
 				foreach (var player in _timedOutPlayers)
-					_networkMediator.PlayerRepository.RemovePlayer(player);
+				{
+					if (_networkMediator.PlayerRepository.Exists(player.Id))
+						_networkMediator.PlayerRepository.RemovePlayer(player);
+				}
 				_timedOutPlayers.Clear();
 			}
 		}

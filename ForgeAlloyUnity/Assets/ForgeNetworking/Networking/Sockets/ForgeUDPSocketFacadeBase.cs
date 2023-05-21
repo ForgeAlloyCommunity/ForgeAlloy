@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
 using Forge.Serialization;
 
 namespace Forge.Networking.Sockets
@@ -12,6 +15,7 @@ namespace Forge.Networking.Sockets
 		protected INetworkMediator networkMediator;
 		public CancellationTokenSource CancellationSource { get; protected set; }
 		protected SynchronizationContext synchronizationContext;
+		private ConcurrentHashSet<long> _blockedEp = new ConcurrentHashSet<long>();
 
 		public ForgeUDPSocketFacadeBase()
 		{
@@ -38,7 +42,8 @@ namespace Forge.Networking.Sockets
 					ManagedSocket.Receive(buffer, ref readEp);
 					try
 					{
-						ProcessMessageRead(buffer, readEp);
+						if (!_blockedEp.Contains(readEp.IPKey()))
+							ProcessMessageRead(buffer, readEp);
 					}
 					catch (Exception ex)
                     {
@@ -55,6 +60,11 @@ namespace Forge.Networking.Sockets
             {
 				networkMediator.EngineProxy.Logger.Log($"Cancelling the background network read task. Unexpected: {ex.Message}");
 			}
+		}
+
+		public void BlockEp(IPEndPoint ep)
+		{
+			_blockedEp.Add(ep.IPKey());
 		}
 
 		protected abstract void ProcessMessageRead(BMSByte buffer, EndPoint sender);

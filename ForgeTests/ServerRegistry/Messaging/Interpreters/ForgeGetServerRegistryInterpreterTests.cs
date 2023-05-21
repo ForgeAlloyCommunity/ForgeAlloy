@@ -25,7 +25,7 @@ namespace ForgeTests.ServerRegistry.Messaging.Interpreters
 			var net = A.Fake<INetworkMediator>();
 			A.CallTo(() => net.PlayerRepository.Count).Returns(players.Length);
 			A.CallTo(() => net.PlayerRepository.GetEnumerator()).Returns(players.ToList().GetEnumerator());
-			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._))
+			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._, 1000))
 				.Invokes((ctx) =>
 				{
 					Assert.IsTrue(ctx.Arguments[0] is ForgeServerRegistryMessage);
@@ -39,7 +39,7 @@ namespace ForgeTests.ServerRegistry.Messaging.Interpreters
 				});
 			var interpreter = new GetServerRegistryInterpreter();
 			interpreter.Interpret(net, players[0].EndPoint, A.Fake<IMessage>());
-			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._))
+			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._, 1000))
 				.MustHaveHappenedOnceExactly();
 		}
 
@@ -56,7 +56,7 @@ namespace ForgeTests.ServerRegistry.Messaging.Interpreters
 			var net = A.Fake<INetworkMediator>();
 			A.CallTo(() => net.PlayerRepository.Count).Returns(players.Length);
 			A.CallTo(() => net.PlayerRepository.GetEnumerator()).Returns(players.ToList().GetEnumerator());
-			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._))
+			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._, 1000))
 				.Invokes((ctx) =>
 				{
 					Assert.IsTrue(ctx.Arguments[0] is ForgeServerRegistryMessage);
@@ -73,7 +73,7 @@ namespace ForgeTests.ServerRegistry.Messaging.Interpreters
 				});
 			var interpreter = new GetServerRegistryInterpreter();
 			interpreter.Interpret(net, players[0].EndPoint, A.Fake<IMessage>());
-			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._))
+			A.CallTo(() => net.MessageBus.SendReliableMessage(A<IMessage>._, A<ISocket>._, A<EndPoint>._, 1000))
 				.MustHaveHappenedOnceExactly();
 		}
 	}

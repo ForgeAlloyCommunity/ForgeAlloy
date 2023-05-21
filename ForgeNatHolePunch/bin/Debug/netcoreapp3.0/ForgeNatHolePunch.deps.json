@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v3.0": {
       "ForgeNatHolePunch/1.0.0": {
+        "dependencies": {
+          "Forge": "1.0.0"
+        },
         "runtime": {
           "ForgeNatHolePunch.dll": {}
+        }
+      },
+      "Forge/1.0.0": {
+        "runtime": {
+          "Forge.dll": {}
         }
       }
     }
   },
   "libraries": {
     "ForgeNatHolePunch/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Forge/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

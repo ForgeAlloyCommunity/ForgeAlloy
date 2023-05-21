@@ -5,6 +5,7 @@ using Forge.Networking.Messaging;
 using Forge.Networking.Players;
 using Forge.ServerRegistry.Messaging.Interpreters;
 using Forge.ServerRegistry.Messaging.Messages;
+using ForgeServerRegistryService.Engine;
 using ForgeServerRegistryService.Networking.Players;
 
 namespace ForgeServerRegistryService.Messaging.Interpreters
@@ -16,43 +17,17 @@ namespace ForgeServerRegistryService.Messaging.Interpreters
 
 		public void Interpret(INetworkMediator netContainer, EndPoint sender, IMessage message)
 		{
-			RegisteredServer server = null;
 
 			var m = (ForgeConnectServerRegistryMessage)message;
 
 			if (sender is not IPEndPoint)
 			{
-				Console.WriteLine("Sender is not an IPEndPoint");
+				netContainer.Logger.Log("Sender is not an IPEndPoint");
 				return;
 			}
 
-			string senderAddress = ((IPEndPoint)sender).Address.MapToIPv4().ToString();
-			ushort senderPort = (ushort)((IPEndPoint)sender).Port;
-
-			var itr = netContainer.PlayerRepository.GetEnumerator();
-			while (itr.MoveNext())
-			{
-				if (itr.Current != null)
-				{
-					if (((RegisteredServer)itr.Current).IP == m.ServerIp && ((RegisteredServer)itr.Current).Port == m.ServerPort)
-					{
-						server = (RegisteredServer)itr.Current;
-						break;
-					}
-				}
-			}
-
-			if (server == null)
-			{
-				Console.WriteLine($"Server not found {m.ServerIp}:{m.ServerPort}");
-			}
-
-			// Send hole punch message to Game Server
-			var holePunchMessage = new ForgeServerHolePunchMessage();
-			holePunchMessage.PlayerIp = senderAddress;
-			holePunchMessage.PlayerPort= senderPort;
-			netContainer.MessageBus.SendReliableMessage(holePunchMessage, netContainer.SocketFacade.ManagedSocket, server.EndPoint);
-			Console.WriteLine($"Hole punch requested for server {server.Name} to client {senderAddress}:{senderPort}");
+			// Hand back to server engine because the server knows about connected game hosts
+			((NatEngine)netContainer.EngineProxy).ServerEngine.ConnectServerRegistry(m, sender);
 		}
 	}
 }

@@ -11,6 +11,7 @@ namespace ForgeSampleGame.Engine
 	{
 		private IForgeLogger m_logger = new ForgeConsoleLogger();
 		public IForgeLogger Logger => m_logger;
+		public string Id => "Client";
 
 		public INetworkMediator NetworkMediator { get; set; }
 		private ISocketFacade _selfSocket => NetworkMediator.SocketFacade;
@@ -38,7 +39,7 @@ namespace ForgeSampleGame.Engine
 		public bool IsConnected { get; set; }
 
 
-		public void Connect(string ip, ushort port, string registryAddress, ushort registryPort)
+		public void Connect(string ip, ushort port, string registryAddress, ushort natPort)
 		{
 			if (NetworkMediator != null)
 			{
@@ -57,12 +58,24 @@ namespace ForgeSampleGame.Engine
 			try
 			{
 				Console.WriteLine($"Connecting {ip}:{port}");
-				NetworkMediator.StartClientWithRegistration(ip, port, registryAddress, registryPort);
+				NetworkMediator.StartClientWithNat(ip, port, registryAddress, natPort);
 			}
 			catch (System.Exception ex)
 			{
 				Console.WriteLine(ex);
 			}
+		}
+
+		public bool CanConnectToChallenge()
+		{
+			// We are already connected. If we receive another challenge
+			// then we must have disconnected and reconnected.
+			if (IsConnected)
+			{
+				ClientTimeout();
+				return false;
+			}
+			return true;
 		}
 
 		public void NetworkingEstablished()
@@ -79,6 +92,13 @@ namespace ForgeSampleGame.Engine
 		private void ClientStarted()
 		{
 			Console.WriteLine($"Client Started. MyPlayerId[{MyPlayerId}]");
+		}
+
+		private void ClientTimeout()
+		{
+			this.IsConnected = false;
+			this.IsConnecting = false;
+			Console.WriteLine($"Client Timeout. MyPlayerId[{MyPlayerId}]");
 		}
 
 	}

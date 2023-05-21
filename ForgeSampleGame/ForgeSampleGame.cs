@@ -1,24 +1,29 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using Forge;
 using Forge.Factory;
 using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
 using Forge.Networking;
 using Forge.Networking.Messaging;
-using Forge.Networking.Messaging.Messages;
 using Forge.Networking.Utilities;
+using Forge.ServerRegistry.DataStructures;
 using Forge.ServerRegistry.Messaging.Interpreters;
 using Forge.ServerRegistry.Messaging.Messages;
 using ForgeSampleGame.Engine;
-using ForgeServerRegistryService.Messaging.Interpreters;
+using ForgeSampleGameServer.Engine;
+using ForgeSampleGame.Messaging.Interpreters;
+using System.Linq;
 
 namespace ForgeSampleGame
 {
 	public class ForgeSampleGame
 	{
 		private static string registryServerAddress;
-		private static SampleGameEngine engine = new SampleGameEngine();
+		private static SampleGameEngineFacade engine = new SampleGameEngineFacade();
 		private static INetworkTypeFactory factory;
+		private static EndPoint registryEndpoint;
+		public static ServerListingEntry[] Servers { get; set; }
 
 		private static void Main(string[] args)
 		{
@@ -38,17 +43,17 @@ namespace ForgeSampleGame
 			ForgeRegistration.Initialize();
 			factory = AbstractFactory.Get<INetworkTypeFactory>();
 			factory.Register<IServerRegistryInterpreter, ForgeServerRegistryInterpreter>();
+			factory.Register<IClientHolePunchInterpreter, ClientHolePunchInterpreter>();
 
-			var registryMediator = factory.GetNew<INetworkMediator>();
-			registryMediator.ChangeEngineProxy(new SampleGameEngine());
-			registryMediator.StartClient(registryServerAddress, GlobalConst.defaultRegistryPort);
+			var registryEngine = new SampleRegistryEngineFacade();
+			registryEngine.Connect(registryServerAddress, GlobalConst.defaultRegistryPort);
 			Console.WriteLine("Client Started...");
 
 
 			// Run Game Client on main thread with active synchronisation context
 			context.Run((object obj) =>
 			{
-				registryMediator.SocketFacade.CancellationSource.Token.ThrowIfCancellationRequested();
+				registryEngine.CancellationSource.Token.ThrowIfCancellationRequested();
 
 				if (Console.KeyAvailable)
 				{
@@ -62,10 +67,10 @@ namespace ForgeSampleGame
 						{
 							case "exit":
 							case "quit":
-								registryMediator.SocketFacade.CancellationSource.Cancel();
+								registryEngine.CancellationSource.Cancel();
 								break;
 							case "list":
-								RequestServerList(registryMediator);
+								RequestServerList(registryEngine.NetworkMediator);
 								break;
 							case "connect":
 								if (line.Split(' ').Length > 1)
@@ -87,25 +92,45 @@ namespace ForgeSampleGame
 					else
 						consoleInput.Append(cki.KeyChar);
 				}
-			}, null, registryMediator.SocketFacade.CancellationSource);
+			}, null, registryEngine.CancellationSource);
 
 		}
 
 		private static void Connect(string gameServerAddress)
 		{
-			var address = gameServerAddress.Split(':');
-			if (address.Length < 1)
-			{
-				Console.WriteLine($"Invalid game server address");
-				return;
-			}
+			string ip = "";
+			ushort port = 0;
 
-			if (ushort.TryParse(address[1], out ushort port))
+			var address = gameServerAddress.Split(':');
+			if (address.Length > 1)
 			{
-				engine.Connect(address[0], port);
+				if (!ushort.TryParse(address[1], out port))
+					Console.WriteLine($"Invalid port");
 			}
 			else
-				Console.WriteLine("Invalid port");
+			{
+				if (gameServerAddress == "x")
+				{
+					ip = "127.0.0.1";
+					port = 12345;
+				}
+				else if (Servers == null)
+				{
+					Console.WriteLine("Invalid server reference");
+				}
+				else if (Servers.Any(s => s.Id.ToString() == gameServerAddress))
+				{
+					var entry = Servers.First(s => s.Id.ToString() == gameServerAddress);
+					ip = entry.Address;
+					port = entry.Port;
+				}
+			}
+
+			if (port == 0) return;
+
+
+			engine.Connect(ip, port, registryServerAddress, GlobalConst.defaultNatPort);
+
 
 		}
 
