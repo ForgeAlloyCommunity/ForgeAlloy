@@ -8,8 +8,6 @@ namespace Forge.Networking.Messaging
 	{
 		void AddMessage(IMessage message, EndPoint sender);
 		void AddMessage(IMessage message, EndPoint sender, int ttlMilliseconds);
-		void AddMessageSend(IMessage message, EndPoint sender);
-		void AddMessageSend(IMessage message, EndPoint sender, int ttlMilliseconds);
 		void RemoveAllFor(EndPoint sender);
 		void RemoveMessage(EndPoint sender, IMessage message);
 		void RemoveMessage(EndPoint sender, IMessageReceiptSignature receipt);
@@ -18,5 +16,10 @@ namespace Forge.Networking.Messaging
 		void Iterate(MessageRepositoryIterator iterator);
 		void Clear();
 		ushort ProcessReliableSignature(EndPoint sender, int id);
+
+		/// <summary>
+		/// Keep track of repository purpose
+		/// </summary>
+		string Id { get; set; }
 	}
 }

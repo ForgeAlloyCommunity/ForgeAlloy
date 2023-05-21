@@ -37,10 +37,11 @@ namespace ForgeServerRegistryService.Messaging.Interpreters
 							var ep = (IPEndPoint)player.EndPoint;
 							entries.Add(new ServerListingEntry
 							{
+								Id = player.Id,
 								Name = player.Name,
 								Address = ep.Address.ToString(),
 								Port = (ushort)ep.Port
-							});
+							}); ;
 						}
 					}
 				}

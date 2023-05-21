@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading;
 using Forge.Factory;
 using Forge.Networking.Messaging.Messages;
@@ -26,6 +27,7 @@ namespace Forge.Networking.Messaging
 			_messageDestructor = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageDestructor>();
 			_messageRepeater = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepeater>();
 			_storedMessages = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
+			_storedMessages.Id = "MessageBus Received Messages";
 			_messageDestructor.BufferPool = _bufferPool;
 			_synchronizationContext = SynchronizationContext.Current;
 		}
@@ -81,10 +83,10 @@ namespace Forge.Networking.Messaging
 			return pageBuffer;
 		}
 
-		public IMessageReceiptSignature SendReliableMessage(IMessage message, ISocket sender, EndPoint receiver)
+		public IMessageReceiptSignature SendReliableMessage(IMessage message, ISocket sender, EndPoint receiver, int ttlMilliseconds = 0)
 		{
-			message.Receipt = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageReceiptSignature>();
-			_messageRepeater.AddMessageToRepeat(message, receiver);
+			//message.Receipt = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageReceiptSignature>();
+			_messageRepeater.AddMessageToRepeat(message, receiver, ttlMilliseconds);
 			SendMessage(message, sender, receiver);
 			return message.Receipt;
 		}
@@ -101,7 +103,6 @@ namespace Forge.Networking.Messaging
 					messageId = constructor.MessageBuffer.GetBasicType<int>();
 					var m = (IMessage)ForgeMessageCodes.Instantiate(messageId);
 					ProcessMessageSignature(readingSocket, messageSender, constructor.MessageBuffer, m);
-
 					if (m.Receipt != null)
 					{
 						if (_storedMessages.Exists(messageSender, m.Receipt))

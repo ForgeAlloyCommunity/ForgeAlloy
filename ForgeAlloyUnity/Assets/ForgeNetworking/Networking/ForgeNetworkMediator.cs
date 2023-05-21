@@ -1,9 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Forge.Engine;
 using Forge.Factory;
 using Forge.Networking.Messaging;
 using Forge.Networking.Players;
 using Forge.Networking.Sockets;
+using Forge.ServerRegistry.Messaging.Messages;
 
 namespace Forge.Networking
 {
@@ -20,6 +22,7 @@ namespace Forge.Networking
 		private readonly IPlayerTimeoutBridge _timeoutBridge;
 		public int MaxPlayers { get; private set; }
 		public string ServerName { get; private set; }
+		public IForgeLogger Logger => EngineProxy.Logger;
 
 		public ForgeNetworkMediator()
 		{
@@ -54,12 +57,50 @@ namespace Forge.Networking
 			MessageBus.SetMediator(this);
 		}
 
+		public void StartNatServer(ushort port)
+		{
+			ServerName = "Nat";
+			var server = AbstractFactory.Get<INetworkTypeFactory>().GetNew<ISocketNatFacade>();
+			SocketFacade = server;
+			server.StartServer(port, this);
+			EngineProxy.NetworkingEstablished();
+			MessageBus.SetMediator(this);
+		}
+
 		public void StartClient(string hostAddress, ushort port)
+		{
+			StartClientWithNat(hostAddress, port, string.Empty, 0);
+		}
+		public void StartClientWithNat(string hostAddress, ushort port, string registrationServerAddress, ushort natPort)
 		{
 			var client = AbstractFactory.Get<INetworkTypeFactory>().GetNew<ISocketClientFacade>();
 			SocketFacade = client;
+
+			if (natPort != 0)
+			{
+				HolePunch(hostAddress, port, registrationServerAddress, natPort);
+			}
+
 			client.StartClient(hostAddress, port, this);
 			MessageBus.SetMediator(this);
+		}
+
+		/// <summary>
+		/// Send a message to the registration server requesting a NAT Hole punch
+		/// that will be sent to the server to punch a hole through its NAT
+		/// </summary>
+		/// <param name="hostAddress"></param>
+		/// <param name="port"></param>
+		/// <param name="registrationServerAddress"></param>
+		/// <param name="natPort"></param>
+		private void HolePunch(string hostAddress, ushort port, string registrationServerAddress, ushort natPort)
+		{
+			var registrationEndPoint = SocketFacade.ManagedSocket.GetEndpoint(registrationServerAddress, natPort);
+			ForgeConnectServerRegistryMessage connectionRequest = ForgeMessageCodes.Instantiate<ForgeConnectServerRegistryMessage>();
+			connectionRequest.ServerIp = hostAddress;
+			connectionRequest.ServerPort = port;
+
+			SendReliableMessage(connectionRequest, registrationEndPoint);
 		}
 
 		public void SendMessage(IMessage message)
@@ -107,9 +148,9 @@ namespace Forge.Networking
 			MessageBus.SendReliableMessage(message, SocketFacade.ManagedSocket, player.EndPoint);
 		}
 
-		public void SendReliableMessage(IMessage message, EndPoint endpoint)
+		public void SendReliableMessage(IMessage message, EndPoint endpoint, int ttlMilliseconds = 0)
 		{
-			MessageBus.SendReliableMessage(message, SocketFacade.ManagedSocket, endpoint);
+			MessageBus.SendReliableMessage(message, SocketFacade.ManagedSocket, endpoint, ttlMilliseconds);
 		}
 	}
 }

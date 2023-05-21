@@ -1,4 +1,5 @@
 ﻿using Forge.Factory;
+using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
 using Forge.Networking.Messaging.Messages;
 using Forge.Networking.Players;
 using Forge.Serialization;
@@ -20,7 +21,7 @@ namespace Forge.Networking.Sockets
 		private RegistryPinger _registryPinger;
 		public IPlayerSignature NetPlayerId { get; set; }
 
-		private readonly List<EndPoint> _bannedEndpoints = new List<EndPoint>();
+		private readonly List<long> _bannedEndpoints = new List<long>();
 
 		private IPlayerRepository _challengedPlayers;
 
@@ -78,7 +79,7 @@ namespace Forge.Networking.Sockets
 
 		protected override void ProcessMessageRead(BMSByte buffer, EndPoint sender)
 		{
-			if (_bannedEndpoints.Contains(sender))
+			if (_bannedEndpoints.Contains(sender.IPKey()))
 				return;
 			else if (!networkMediator.PlayerRepository.Exists(sender))
 			{
@@ -117,7 +118,7 @@ namespace Forge.Networking.Sockets
 			if (sendChallenge)
 			{
 				var challengeMessage = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IChallengeMessage>();
-				networkMediator.MessageBus.SendReliableMessage(challengeMessage, ManagedSocket, sender);
+				networkMediator.MessageBus.SendReliableMessage(challengeMessage, ManagedSocket, sender, 250);
 			}
 		}
 

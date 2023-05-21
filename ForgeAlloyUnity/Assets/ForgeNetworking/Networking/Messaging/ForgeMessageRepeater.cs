@@ -23,14 +23,15 @@ namespace Forge.Networking.Messaging
 		public void Start(INetworkMediator networkMediator)
 		{
 			_networkMediator = networkMediator;
+			_messageRepository.Id = $"[{_networkMediator.EngineProxy.Id}]Repeater";
 			_socketTokenSourceRef = _networkMediator.SocketFacade.CancellationSource;
 			Task.Run(RepeatInBackground, _socketTokenSourceRef.Token);
 		}
 
-		public void AddMessageToRepeat(IMessage message, EndPoint receiver)
+		public void AddMessageToRepeat(IMessage message, EndPoint receiver, int ttlMilliseconds = 0)
 		{
 			//if (!_messageRepository.Exists(receiver, message.Receipt))
-				_messageRepository.AddMessage(message, receiver);
+				_messageRepository.AddMessage(message, receiver, ttlMilliseconds);
 		}
 
 		public void RemoveRepeatingMessage(EndPoint sender, IMessageReceiptSignature messageReceipt, ushort recentPackets)

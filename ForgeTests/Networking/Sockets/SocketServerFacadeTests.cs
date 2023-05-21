@@ -37,7 +37,7 @@ namespace ForgeTests.Networking.Socket
 			client.Send(client.EndPoint, buffer);
 			Thread.Sleep(50);
 			A.CallTo(() => netContainer.MessageBus.SendReliableMessage(A<IChallengeMessage>._,
-				A<ISocket>._, A<EndPoint>._)).MustHaveHappenedOnceExactly();
+				A<ISocket>._, A<EndPoint>._, 1000)).MustHaveHappenedOnceExactly();
 			client.Close();
 			serverFacade.ShutDown();
 		}
@@ -52,12 +52,12 @@ namespace ForgeTests.Networking.Socket
 			var clientFacade = AbstractFactory.Get<INetworkTypeFactory>().GetNew<ISocketClientFacade>();
 			bool done = false;
 			A.CallTo(() => netContainerServer.MessageBus.SendReliableMessage(A<IChallengeMessage>._,
-				A<ISocket>._, A<EndPoint>._)).Invokes((ctx) =>
+				A<ISocket>._, A<EndPoint>._, 1000)).Invokes((ctx) =>
 				{
 					var interpreter = new ForgeConnectChallengeInterpreter();
 					interpreter.Interpret(netContainerClient, A.Fake<EndPoint>(), (IChallengeMessage)ctx.Arguments[0]);
 					A.CallTo(() => netContainerClient.MessageBus.SendReliableMessage(A<IChallengeResponseMessage>._,
-						A<ISocket>._, A<EndPoint>._)).MustHaveHappenedOnceExactly();
+						A<ISocket>._, A<EndPoint>._, 1000)).MustHaveHappenedOnceExactly();
 					done = true;
 				});
 			var client = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IClientSocket>();
@@ -81,7 +81,7 @@ namespace ForgeTests.Networking.Socket
 			A.CallTo(() => clientMediator.SocketFacade).Returns(clientFacade);
 			bool done = false;
 			A.CallTo(() => clientMediator.MessageBus.SendReliableMessage(A<IChallengeResponseMessage>._,
-				A<ISocket>._, A<EndPoint>._)).Invokes((ctx) =>
+				A<ISocket>._, A<EndPoint>._, 1000)).Invokes((ctx) =>
 				{
 					Assert.IsTrue(((IChallengeResponseMessage)ctx.Arguments[0]).ValidateResponse());
 					var finalInterpreter = new ForgeConnectChallengeResponseInterpreter();
@@ -90,7 +90,7 @@ namespace ForgeTests.Networking.Socket
 					done = true;
 				});
 			A.CallTo(() => serverMediator.MessageBus.SendReliableMessage(A<IChallengeMessage>._,
-				A<ISocket>._, A<EndPoint>._)).Invokes((ctx) =>
+				A<ISocket>._, A<EndPoint>._, 1000)).Invokes((ctx) =>
 				{
 					var interpreter = new ForgeConnectChallengeInterpreter();
 					interpreter.Interpret(clientMediator, A.Fake<EndPoint>(), (IChallengeMessage)ctx.Arguments[0]);

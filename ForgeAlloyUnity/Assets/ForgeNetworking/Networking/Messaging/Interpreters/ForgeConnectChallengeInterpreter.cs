@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Forge.Factory;
 using Forge.Networking.Messaging.Messages;
 
@@ -11,9 +12,12 @@ namespace Forge.Networking.Messaging.Interpreters
 
 		public void Interpret(INetworkMediator netHost, EndPoint sender, IMessage message)
 		{
-			var response = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IChallengeResponseMessage>();
-			response.GenerateResponse((IChallengeMessage)message);
-			netHost.MessageBus.SendReliableMessage(response, netHost.SocketFacade.ManagedSocket, sender);
+			if (netHost.EngineProxy.CanConnectToChallenge())
+			{
+				var response = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IChallengeResponseMessage>();
+				response.GenerateResponse((IChallengeMessage)message);
+				netHost.MessageBus.SendReliableMessage(response, netHost.SocketFacade.ManagedSocket, sender);
+			}
 		}
 	}
 }

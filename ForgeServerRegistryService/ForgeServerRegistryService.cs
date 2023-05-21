@@ -5,6 +5,7 @@ using Forge.Factory;
 using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
 using Forge.Networking;
 using Forge.Networking.Players;
+using Forge.Networking.Sockets;
 using Forge.Networking.Utilities;
 using Forge.ServerRegistry.Messaging.Interpreters;
 using ForgeServerRegistryService.Engine;
@@ -29,6 +30,7 @@ namespace ForgeServerRegistryService
 		private static ForgeSynchronizationContext context;
 		private static INetworkMediator networkMediator;
 
+		private static INetworkMediator natMediator;
 		private static void Main(string[] args)
 		{
 
@@ -42,13 +44,21 @@ namespace ForgeServerRegistryService
 			var factory = AbstractFactory.Get<INetworkTypeFactory>();
 			factory.Register<IRegisterAsServerInterpreter, RegisterAsServerInterpreter>();
 			factory.Register<IGetServerRegistryInterpreter, GetServerRegistryInterpreter>();
+			factory.Register<IConnectServerRegistryInterpreter, ConnectServerRegistryInterpreter>();
 			factory.Replace<INetPlayer, RegisteredServer>();
+			factory.Replace<ISocketNatFacade, ForgeUDPNatFacade>();
 
 			networkMediator = factory.GetNew<INetworkMediator>();
 			networkMediator.PlayerRepository.onPlayerAddedSubscription += onPlayerAdded;
 			networkMediator.PlayerRepository.onPlayerRemovedSubscription += onPlayerDisconnected;
-			networkMediator.ChangeEngineProxy(new ServerRegistryEngine());
+			var engine = new ServerRegistryEngine();
+			networkMediator.ChangeEngineProxy(engine);
+			engine.NetContainer = networkMediator;
 			networkMediator.StartServer(GlobalConst.defaultRegistryPort, defaultMaxPlayers);
+
+			natMediator = factory.GetNew<INetworkMediator>();
+			natMediator.ChangeEngineProxy(new NatEngine((ServerRegistryEngine)networkMediator.EngineProxy));
+			natMediator.StartNatServer(GlobalConst.defaultNatPort);
 
 			Console.WriteLine($"Registry Server listening on port {GlobalConst.defaultRegistryPort}");
 
@@ -140,12 +150,12 @@ namespace ForgeServerRegistryService
 
 		private static void onPlayerDisconnected(INetPlayer server)
 		{
-			Console.WriteLine($"Server Disconnected: {server.Id}");
+			Console.WriteLine($"EndPoint Disconnected: {server.Id}");
 		}
 
 		private static void onPlayerAdded(INetPlayer player)
 		{
-			Console.WriteLine($"Server Connected: {player.Id}");
+			Console.WriteLine($"EndPoint Connected: {player.Id}");
 		}
 	}
 }

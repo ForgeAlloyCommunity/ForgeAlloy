@@ -1,38 +1,23 @@
 ﻿using System;
+using System.Threading;
 using Forge.Engine;
 using Forge.Factory;
 using Forge.Networking;
-using Forge.Networking.Players;
 using Forge.Networking.Sockets;
 
-namespace ForgeSampleGame.Engine
+
+namespace ForgeSampleGameServer.Engine
 {
-	internal class SampleGameEngine : IEngineProxy
+	public  class SampleRegistryEngineFacade : IEngineProxy
 	{
-		private IForgeLogger m_logger = new ForgeConsoleLogger();
-		public IForgeLogger Logger => m_logger;
+		private IForgeLogger logger = new ForgeConsoleLogger();
+		public IForgeLogger Logger => logger;
+		public string Id => "SampleRegistryClient";
 
 		public INetworkMediator NetworkMediator { get; set; }
 		private ISocketFacade _selfSocket => NetworkMediator.SocketFacade;
 
-		public IPlayerSignature MyPlayerId
-		{
-			get
-			{
-				if (NetworkMediator != null)
-				{
-					if (NetworkMediator.SocketFacade != null)
-					{
-						return NetworkMediator.SocketFacade.NetPlayerId;
-					}
-					else
-						return null;
-				}
-				else
-					return null;
-
-			}
-		}
+		public CancellationTokenSource CancellationSource => NetworkMediator.SocketFacade.CancellationSource;
 
 		public bool IsConnecting { get; set; }
 		public bool IsConnected { get; set; }
@@ -68,17 +53,16 @@ namespace ForgeSampleGame.Engine
 		{
 			if (IsConnecting)
 			{
-				ClientStarted();
-				IsConnected= true;
-				IsConnecting= false;
+				Console.WriteLine($"Connected to Registry");
+				IsConnected = true;
+				IsConnecting = false;
 			}
 			return;
 		}
 
-		private void ClientStarted()
+		public bool CanConnectToChallenge()
 		{
-			Console.WriteLine($"Client Started. MyPlayerId[{MyPlayerId}]");
+			return true;
 		}
-
 	}
 }

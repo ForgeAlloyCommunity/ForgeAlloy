@@ -1,3 +1,4 @@
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
 
@@ -22,22 +23,37 @@ namespace Forge.Networking.Sockets
 
 		private static IPEndPoint LocateAssociatedIP(string address, ushort port)
 		{
-			string host = string.IsNullOrEmpty(address) ? Dns.GetHostName() : address;
-			IPHostEntry ipHostInfo = Dns.GetHostEntry(host);
-
-			// TODO:  Support IPv6
-			IPAddress ipAddress = null;
-			for (int i = 0; i < ipHostInfo.AddressList.Length; ++i)
+			try
 			{
-				ipAddress = ipHostInfo.AddressList[i];
-				if (ipAddress.AddressFamily != AddressFamily.InterNetworkV6)
+				string host = string.IsNullOrEmpty(address) ? Dns.GetHostName() : address;
+				IPHostEntry ipHostInfo = Dns.GetHostEntry(host);
+
+				// TODO:  Support IPv6
+				IPAddress ipAddress = null;
+				for (int i = 0; i < ipHostInfo.AddressList.Length; ++i)
 				{
-					break;
+					ipAddress = ipHostInfo.AddressList[i];
+					if (ipAddress.AddressFamily != AddressFamily.InterNetworkV6)
+					{
+						break;
+					}
 				}
+
+				var localEndPoint = new IPEndPoint(ipAddress, port);
+				return localEndPoint;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
 			}
 
-			var localEndPoint = new IPEndPoint(ipAddress, port);
-			return localEndPoint;
+			if (IPAddress.TryParse(address, out var ip))
+			{
+				IPEndPoint ep = new IPEndPoint(ip, port);
+				return ep;
+			}
+			throw new Exception("Cannot parse IP Address");
+
 		}
 	}
 }

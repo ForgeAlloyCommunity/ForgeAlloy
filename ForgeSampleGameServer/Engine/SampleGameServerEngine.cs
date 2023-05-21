@@ -7,6 +7,12 @@ namespace ForgeSampleGameServer.Engine
 	{
 		private IForgeLogger logger = new ForgeConsoleLogger();
 		public IForgeLogger Logger => logger;
+		public string Id => "Game";
+
+		public bool CanConnectToChallenge()
+		{
+			return false;
+		}
 
 		public void NetworkingEstablished()
 		{
