@@ -90,7 +90,7 @@ namespace Forge.Networking.Messaging
 
 		public void AddMessage(IMessage message, EndPoint receiver)
 		{
-			message.Receipt = GetNewMessageReceipt(receiver);
+			//message.Receipt = GetNewMessageReceipt(receiver);
 
 			if (message.Receipt == null)
 				throw new MessageRepositoryMissingReceiptOnMessageException();
@@ -124,7 +124,7 @@ namespace Forge.Networking.Messaging
 		{
 			AddMessage(message, receiver);
 
-			var span = new TimeSpan(0, 0, 0, 0, ttlMilliseconds <= 0 ? 5000 : ttlMilliseconds);
+			var span = new TimeSpan(0, 0, 0, 0, ttlMilliseconds <= 0 ? GlobalConst.maxMessageRepeatMilliseconds : ttlMilliseconds);
 			var now = DateTime.UtcNow;
 			lock (_messagesWithTTL)
 			{
@@ -320,7 +320,7 @@ namespace Forge.Networking.Messaging
 			return _endpointRepeater[sender.IPKey()].ProcessReliableSignature(id);
 		}
 
-		private IMessageReceiptSignature GetNewMessageReceipt(EndPoint receiver)
+		public IMessageReceiptSignature GetNewMessageReceipt(EndPoint receiver)
 		{
 			if (!_endpointRepeater.ContainsKey(receiver.IPKey()))
 			{
