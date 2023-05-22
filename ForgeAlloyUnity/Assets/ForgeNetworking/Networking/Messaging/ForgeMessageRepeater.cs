@@ -69,5 +69,10 @@ namespace Forge.Networking.Messaging
 			_networkMediator.MessageBus.SendMessage(message,
 				_networkMediator.SocketFacade.ManagedSocket, endpoint);
 		}
+
+		public IMessageReceiptSignature GetNewMessageReceipt(EndPoint receiver)
+		{
+			return _messageRepository.GetNewMessageReceipt(receiver);
+		}
 	}
 }

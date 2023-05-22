@@ -16,6 +16,7 @@ namespace Forge.Networking.Messaging
 		void Iterate(MessageRepositoryIterator iterator);
 		void Clear();
 		ushort ProcessReliableSignature(EndPoint sender, int id);
+		IMessageReceiptSignature GetNewMessageReceipt(EndPoint receiver);
 
 		/// <summary>
 		/// Keep track of repository purpose

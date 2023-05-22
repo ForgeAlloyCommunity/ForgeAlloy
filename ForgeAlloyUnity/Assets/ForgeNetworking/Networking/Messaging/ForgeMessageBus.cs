@@ -86,6 +86,7 @@ namespace Forge.Networking.Messaging
 		public IMessageReceiptSignature SendReliableMessage(IMessage message, ISocket sender, EndPoint receiver, int ttlMilliseconds = 0)
 		{
 			//message.Receipt = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageReceiptSignature>();
+			message.Receipt = _messageRepeater.GetNewMessageReceipt(receiver);
 			_messageRepeater.AddMessageToRepeat(message, receiver, ttlMilliseconds);
 			SendMessage(message, sender, receiver);
 			return message.Receipt;
@@ -160,6 +161,7 @@ namespace Forge.Networking.Messaging
 				ForgeReceiptAcknowledgementMessage ack = _msgAckPool.Get();
 				ack.ReceiptSignature = sig;
 				ack.RecentPackets = _storedMessages.ProcessReliableSignature(messageSender, sig.GetHashCode());
+				//Console.WriteLine($"[{m.Receipt}] Ack Message {messageSender} {Convert.ToString(ack.RecentPackets,2)} {m.GetType().Name}");
 				SendMessage(ack, readingSocket, messageSender);
 			}
 		}

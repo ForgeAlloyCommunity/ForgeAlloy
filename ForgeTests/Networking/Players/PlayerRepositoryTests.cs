@@ -91,17 +91,19 @@ namespace ForgeTests.Networking.Player
 			Assert.Throws<PlayerNotFoundException>(() => repo.GetPlayer(wrongEp));
 		}
 
-		[Test]
-		public void AddingPlayer_ShouldHaveGuidAssigned()
-		{
-			var initialId = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IPlayerSignature>();
-			var player = A.Fake<INetPlayer>();
-			player.Id = initialId;
-			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IPlayerRepository>();
-			repo.AddPlayer(player);
-			Assert.AreNotEqual(initialId, player.Id);
-			Assert.AreNotEqual(new Guid(), player.Id);
-		}
+		// This test is no longer valid.  The AddPlayer will check if the player already has
+		// and Id and if they do, it will not replace it
+		//[Test]
+		//public void AddingPlayer_ShouldHaveGuidAssigned()
+		//{
+		//	var initialId = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IPlayerSignature>();
+		//	var player = A.Fake<INetPlayer>();
+		//	player.Id = initialId;
+		//	var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IPlayerRepository>();
+		//	repo.AddPlayer(player);
+		//	Assert.AreNotEqual(initialId, player.Id);
+		//	Assert.AreNotEqual(new Guid(), player.Id);
+		//}
 
 		[Test]
 		public void AddingPlayer_ShouldInvokeTheAddedPlayerEventAndMatch()

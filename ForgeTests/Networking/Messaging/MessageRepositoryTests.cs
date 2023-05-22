@@ -74,7 +74,10 @@ namespace ForgeTests.Networking.Messaging
 			var endpoint = A.Fake<EndPoint>();
 			message.Receipt = A.Fake<IMessageReceiptSignature>();
 			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			repo.AddMessage(message, endpoint, 3);
+			// This test can be sensitive to the TTL.
+			// If it is too short when all tests are run, this test will fail.
+			// 10 fails sometimes, but 50 seems ok
+			repo.AddMessage(message, endpoint, 50);
 			Assert.IsTrue(repo.Exists(endpoint, message.Receipt));
 			Thread.Sleep(1);
 			Assert.IsTrue(repo.Exists(endpoint, message.Receipt));
@@ -86,19 +89,22 @@ namespace ForgeTests.Networking.Messaging
 			Assert.IsTrue(removed);
 		}
 
-		[Test]
-		public void AddMessageWithNegativeTTL_ShouldThrow()
-		{
-			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			Assert.Throws<InvalidMessageRepositoryTTLProvided>(() => repo.AddMessage(A.Fake<IMessage>(), A.Fake<EndPoint>(), -1));
-		}
+		// Test no longer valid. The addmessage will auto-correct -ve or sero TTL
+		//[Test]
+		//public void AddMessageWithNegativeTTL_ShouldThrow()
+		//{
+		//	var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
+		//	Assert.Throws<InvalidMessageRepositoryTTLProvided>(() => repo.AddMessage(A.Fake<IMessage>(), A.Fake<EndPoint>(), -1));
+		//}
 
-		[Test]
-		public void AddMessageWithZeroTTL_ShouldThrow()
-		{
-			var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
-			Assert.Throws<InvalidMessageRepositoryTTLProvided>(() => repo.AddMessage(A.Fake<IMessage>(), A.Fake<EndPoint>(), 0));
-		}
+		// Test no longer valid. The addmessage will auto-correct -ve or sero TTL
+		// Test no longer valid
+		//[Test]
+		//public void AddMessageWithZeroTTL_ShouldThrow()
+		//{
+		//	var repo = AbstractFactory.Get<INetworkTypeFactory>().GetNew<IMessageRepository>();
+		//	Assert.Throws<InvalidMessageRepositoryTTLProvided>(() => repo.AddMessage(A.Fake<IMessage>(), A.Fake<EndPoint>(), 0));
+		//}
 
 		// TODO:  Validate the endpoint on the messages
 		// TODO:  Validate the iterator of the messages

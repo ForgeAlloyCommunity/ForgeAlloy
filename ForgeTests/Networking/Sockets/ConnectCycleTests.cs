@@ -22,7 +22,9 @@ namespace ForgeTests.Networking.Sockets
 		public void ConnectCycle()
 		{
 			var serverEngine = A.Fake<IEngineProxy>();
+			A.CallTo(() => serverEngine.CanConnectToChallenge()).Returns(true);
 			var clientEngine = A.Fake<IEngineProxy>();
+			A.CallTo(() => clientEngine.CanConnectToChallenge()).Returns(true);
 			var factory = AbstractFactory.Get<INetworkTypeFactory>();
 			var serverMediator = factory.GetNew<INetworkMediator>();
 			serverMediator.ChangeEngineProxy(serverEngine);
