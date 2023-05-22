@@ -21,7 +21,7 @@ If you can name it, Forge most likely can do it :), it is built on some basic pr
 ## Getting Started
 Use the links below to learn how to create your first project with Forge Alloy, and be sure to join our active Discord server to talk with other Forge users.
 
-[Official Documentation](https://github.com/BeardedManStudios/ForgeAlloy/wiki)
+[Official Documentation](https://github.com/ForgeAlloyCommunity/ForgeAlloy/wiki)
 
 [Discord](https://discord.gg/yzZwEYm) - Join us and the growing community, for talking about Forge Networking as well as just networking in general. Even if you don't exactly use Forge Networking in your project you can get a ton of insight from this community :)
 
