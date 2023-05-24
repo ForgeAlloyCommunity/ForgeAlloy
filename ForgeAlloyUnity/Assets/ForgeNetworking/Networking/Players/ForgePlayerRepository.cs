@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Forge.Factory;
-using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
+using Forge.Utilities;
 
 namespace Forge.Networking.Players
 {

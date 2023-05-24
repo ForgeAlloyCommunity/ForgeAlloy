@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Forge.Networking.Messaging;
 using Forge.Networking.Messaging.Messages;
 using Forge.Networking.Sockets;
 
@@ -40,7 +41,7 @@ namespace Forge.Networking
 
 		private void SendPingToServer(object state)
 		{
-			_networkMediator.MessageBus.SendMessage(new ForgePingMessage(),
+			_networkMediator.MessageBus.SendMessage(ForgeMessageCodes.Instantiate<ForgePingMessage>(),
 				_networkMediator.SocketFacade.ManagedSocket, _networkMediator.SocketFacade.ManagedSocket.EndPoint);
 		}
 	}

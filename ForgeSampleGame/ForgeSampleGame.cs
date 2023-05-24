@@ -3,10 +3,9 @@ using System.Net;
 using System.Text;
 using Forge;
 using Forge.Factory;
-using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
+using Forge.Utilities;
 using Forge.Networking;
 using Forge.Networking.Messaging;
-using Forge.Networking.Utilities;
 using Forge.ServerRegistry.DataStructures;
 using Forge.ServerRegistry.Messaging.Interpreters;
 using Forge.ServerRegistry.Messaging.Messages;
@@ -81,6 +80,7 @@ namespace ForgeSampleGame
 							case "?":
 								Console.WriteLine("Commands:");
 								Console.WriteLine("exit/quit             Stop this service");
+								Console.WriteLine("connect server		 Connects to server. Can be Id or IP");
 								Console.WriteLine("list                  List available servers");
 								Console.WriteLine("");
 								break;

@@ -69,5 +69,22 @@ namespace Forge.Networking.Messaging
 			_messageTypes.Clear();
 			_messageCodes.Clear();
 		}
+		public static List<int> AllMessageCodes()
+		{
+			List<int> codes = new List<int>();
+			foreach (var type in _messageTypes)
+			{
+				codes.Add(type.Key);
+			}
+			return codes;
+		}
+
+		public static List<PoolStats> GetPoolStats()
+		{
+			var stats = _messagePool.GetPoolStats();
+			foreach (var s in stats)
+				s.MessageId = _messageCodes[s.MessageType];
+			return stats;
+		}
 	}
 }

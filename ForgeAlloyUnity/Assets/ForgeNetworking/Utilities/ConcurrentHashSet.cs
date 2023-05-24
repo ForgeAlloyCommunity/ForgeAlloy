@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities
+namespace Forge.Utilities
 {
 
 

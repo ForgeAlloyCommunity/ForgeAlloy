@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading;
 using Forge.Factory;
 using Forge.Networking.Messaging.Messages;
@@ -81,6 +80,10 @@ namespace Forge.Networking.Messaging
 			var pageBuffer = _bufferPool.Get(page.Length);
 			pageBuffer.BlockCopy(buffer.byteArr, page.StartOffset, page.Length);
 			return pageBuffer;
+		}
+		public int GetRepeatBufferCount()
+		{
+			return _messageRepeater.GetRepeatBufferCount();
 		}
 
 		public IMessageReceiptSignature SendReliableMessage(IMessage message, ISocket sender, EndPoint receiver, int ttlMilliseconds = 0)

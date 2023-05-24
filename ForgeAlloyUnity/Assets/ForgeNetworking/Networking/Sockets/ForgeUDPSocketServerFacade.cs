@@ -1,5 +1,5 @@
 ﻿using Forge.Factory;
-using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
+using Forge.Utilities;
 using Forge.Networking.Messaging.Messages;
 using Forge.Networking.Players;
 using Forge.Serialization;
