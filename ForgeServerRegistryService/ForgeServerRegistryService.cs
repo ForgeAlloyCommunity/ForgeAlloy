@@ -2,11 +2,10 @@
 using System.Text;
 using Forge;
 using Forge.Factory;
-using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
+using Forge.Utilities;
 using Forge.Networking;
 using Forge.Networking.Players;
 using Forge.Networking.Sockets;
-using Forge.Networking.Utilities;
 using Forge.ServerRegistry.Messaging.Interpreters;
 using ForgeServerRegistryService.Engine;
 using ForgeServerRegistryService.Messaging.Interpreters;
@@ -121,7 +120,8 @@ namespace ForgeServerRegistryService
 									while (itr.MoveNext())
 									{
 										var server = (RegisteredServer)itr.Current;
-										Console.WriteLine($"Server[{server.Id}] Name[{server.Name}] Players[{server.CurrentPlayers}/{server.MaxPlayers}]");
+										if (server.IsRegisteredServer)
+											Console.WriteLine($"Server[{server.Id}] Name[{server.Name}] Players[{server.CurrentPlayers}/{server.MaxPlayers}]");
 									}
 									Console.WriteLine("=== End Server List ===");
 									break;

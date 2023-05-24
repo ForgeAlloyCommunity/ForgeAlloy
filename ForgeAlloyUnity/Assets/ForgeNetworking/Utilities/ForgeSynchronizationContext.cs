@@ -3,7 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace Forge.Networking.Utilities
+namespace Forge.Utilities
 {
 
     public sealed class ForgeSynchronizationContext : SynchronizationContext

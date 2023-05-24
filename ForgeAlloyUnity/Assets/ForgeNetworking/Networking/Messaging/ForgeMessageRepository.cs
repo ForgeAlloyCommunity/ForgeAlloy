@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Forge.Factory;
-using Forge.ForgeAlloyUnity.Assets.ForgeNetworking.Utilities;
+using Forge.Utilities;
 
 namespace Forge.Networking.Messaging
 {
@@ -277,6 +277,35 @@ namespace Forge.Networking.Messaging
 					}
 				}
 			}
+		}
+
+		public double GetTTLDiff(EndPoint sender, IMessageReceiptSignature receipt, int ttlMilliseconds)
+		{
+			double diff = -1;
+			lock (_messagesWithTTL)
+			{
+				for (int i = 0; i < _messagesWithTTL.Count; i++)
+				{
+					try
+					{
+						if (_messagesWithTTL[i].message.Receipt != null)  // Not sure why this happens
+						{
+							if (_messagesWithTTL[i].message.Receipt.Equals(receipt))
+							{
+								var span = new TimeSpan(0, 0, 0, 0, ttlMilliseconds);
+								diff = (DateTime.UtcNow - (_messagesWithTTL[i].ttl - span)).TotalMilliseconds;
+								break;
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						//UnityEngine.Debug.LogError($"GetTTLDiff: {receipt.ToString()}: {ex.Message}");
+					}
+				}
+
+			}
+			return diff;
 		}
 
 		public void Iterate(MessageRepositoryIterator iterator)

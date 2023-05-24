@@ -13,8 +13,10 @@ namespace Forge.Networking.Messaging
 		void RemoveMessage(EndPoint sender, IMessageReceiptSignature receipt);
 		void RemoveMessage(EndPoint sender, IMessageReceiptSignature receipt, ushort recentPackets);
 		bool Exists(EndPoint sender, IMessageReceiptSignature receipt);
+		double GetTTLDiff(EndPoint sender, IMessageReceiptSignature receipt, int ttlMilliseconds);
 		void Iterate(MessageRepositoryIterator iterator);
 		void Clear();
+		int GetMessageCount();
 		ushort ProcessReliableSignature(EndPoint sender, int id);
 		IMessageReceiptSignature GetNewMessageReceipt(EndPoint receiver);
 

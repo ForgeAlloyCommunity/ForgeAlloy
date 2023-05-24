@@ -13,5 +13,6 @@ namespace Forge.Networking.Messaging
 		void ReceiveMessageBuffer(ISocket readingSocket, EndPoint messageSender, BMSByte messageBuffer);
 		void SetMediator(INetworkMediator mediator);
 		void MessageConfirmed(EndPoint sender, IMessageReceiptSignature messageReceipt, ushort recentPackets);
+		int GetRepeatBufferCount();
 	}
 }

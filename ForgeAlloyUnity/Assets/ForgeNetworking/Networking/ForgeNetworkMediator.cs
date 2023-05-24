@@ -108,11 +108,13 @@ namespace Forge.Networking
 			if (SocketFacade is ISocketServerFacade)
 			{
 				var itr = PlayerRepository.GetEnumerator();
+				message.StartSending();
 				while (itr.MoveNext())
 				{
 					if (itr.Current != null)
 						MessageBus.SendMessage(message, SocketFacade.ManagedSocket, itr.Current.EndPoint);
 				}
+				message.FinishSending();
 			}
 			else
 				MessageBus.SendMessage(message, SocketFacade.ManagedSocket, SocketFacade.ManagedSocket.EndPoint);

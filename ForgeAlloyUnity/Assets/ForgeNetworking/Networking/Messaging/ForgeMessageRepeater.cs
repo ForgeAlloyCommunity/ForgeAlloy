@@ -38,6 +38,14 @@ namespace Forge.Networking.Messaging
 		{
 			_messageRepository.RemoveMessage(sender, messageReceipt, recentPackets);
 		}
+		public int GetRepeatBufferCount()
+		{
+			return _messageRepository.GetMessageCount();
+		}
+		public double GetTTLDiff(EndPoint sender, IMessageReceiptSignature messageReceipt, int ttlMilliseconds)
+		{
+			return _messageRepository.GetTTLDiff(sender, messageReceipt, ttlMilliseconds);
+		}
 
 		public void RemoveAllFor(EndPoint receiver)
 		{

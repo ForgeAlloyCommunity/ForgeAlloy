@@ -46,4 +46,13 @@ namespace Forge.Networking.Messaging
 		public EngineMessageContractAttribute(int id, Type type)
 			: base(-id, type) { inputId = id; }
 	}
+
+	public sealed class EntityContractAttribute : MessageContractAttribute
+	{
+		public EntityContractAttribute(int id, Type type)
+			: base(id, type) { inputId = id; }
+
+		public int GetActionId() => base.id;
+		public Type GetActionClassType() => base.GetClassType();
+	}
 }
