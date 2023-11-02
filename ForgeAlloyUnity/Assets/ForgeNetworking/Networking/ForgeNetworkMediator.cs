@@ -154,5 +154,18 @@ namespace Forge.Networking
 		{
 			MessageBus.SendReliableMessage(message, SocketFacade.ManagedSocket, endpoint, ttlMilliseconds);
 		}
+		public void Shutdown()
+		{
+			if (SocketFacade != null)
+			{
+				SocketFacade.ShutDown();
+				SocketFacade = null;
+			}
+		}
+
+		~ForgeNetworkMediator()
+		{
+			Shutdown();
+		}
 	}
 }

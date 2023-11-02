@@ -30,5 +30,6 @@ namespace Forge.Networking
 		int MaxPlayers { get; }
 		string ServerName { get; }
 		IForgeLogger Logger { get; }
+		void Shutdown();
 	}
 }

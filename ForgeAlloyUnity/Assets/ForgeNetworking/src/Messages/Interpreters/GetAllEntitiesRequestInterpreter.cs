@@ -6,7 +6,7 @@ namespace Forge.Networking.Unity.Messages.Interpreters
 {
 	public class GetAllEntitiesRequestInterpreter : IMessageInterpreter
 	{
-		public static GetAllEntitiesRequestInterpreter Instance { get; private set; } = new GetAllEntitiesRequestInterpreter();
+		public static GetAllEntitiesRequestInterpreter Instance { get; set; } = new GetAllEntitiesRequestInterpreter();
 
 		public bool ValidOnClient => false;
 		public bool ValidOnServer => true;

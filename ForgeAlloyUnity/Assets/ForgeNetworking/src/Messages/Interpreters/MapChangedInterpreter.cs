@@ -6,7 +6,7 @@ namespace Forge.Networking.Unity.Messages.Interpreters
 {
 	public class MapChangedInterpreter : IMessageInterpreter
 	{
-		public static MapChangedInterpreter Instance { get; private set; } = new MapChangedInterpreter();
+		public static MapChangedInterpreter Instance { get; set; } = new MapChangedInterpreter();
 
 		public bool ValidOnClient => true;
 		public bool ValidOnServer => false;

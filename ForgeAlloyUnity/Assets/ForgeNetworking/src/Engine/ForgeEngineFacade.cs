@@ -37,7 +37,9 @@ namespace Forge.Networking.Unity
 		public IEntityRepository EntityRepository { get; private set; }
 		public bool IsServer => NetworkMediator.SocketFacade is ISocketServerFacade;
 
-		public void NetworkingEstablished()
+        public string Id { get; set; }
+
+        public void NetworkingEstablished()
 		{
 			if (IsServer)
 				ServerStarted();
@@ -81,5 +83,10 @@ namespace Forge.Networking.Unity
 			Destroy(gameObject);
 			SceneManager.LoadScene(_sceneToDisconnectTo);
 		}
-	}
+
+        public bool CanConnectToChallenge()
+        {
+            return true;
+        }
+    }
 }

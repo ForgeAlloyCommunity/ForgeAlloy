@@ -68,7 +68,8 @@ namespace Forge.Networking.Messaging
 		{
 			_messageTypes.Clear();
 			_messageCodes.Clear();
-		}
+			_messagePool.Clear();
+        }
 		public static List<int> AllMessageCodes()
 		{
 			List<int> codes = new List<int>();

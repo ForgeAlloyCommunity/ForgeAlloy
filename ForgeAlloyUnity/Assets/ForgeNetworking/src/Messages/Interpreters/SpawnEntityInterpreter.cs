@@ -5,7 +5,7 @@ namespace Forge.Networking.Unity.Messages.Interpreters
 {
 	public class SpawnEntityInterpreter : IMessageInterpreter
 	{
-		public static SpawnEntityInterpreter Instance { get; private set; } = new SpawnEntityInterpreter();
+		public static SpawnEntityInterpreter Instance { get; set; } = new SpawnEntityInterpreter();
 
 		public bool ValidOnClient => true;
 		public bool ValidOnServer => true;

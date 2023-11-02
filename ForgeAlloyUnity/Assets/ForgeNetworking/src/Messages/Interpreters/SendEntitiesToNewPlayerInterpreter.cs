@@ -8,7 +8,7 @@ namespace Forge.Networking.Unity.Messages.Interpreters
 
 	public class SendEntitiesToNewPlayerInterpreter : IMessageInterpreter
 	{
-		public static SendEntitiesToNewPlayerInterpreter Instance { get; private set; } = new SendEntitiesToNewPlayerInterpreter();
+		public static SendEntitiesToNewPlayerInterpreter Instance { get; set; } = new SendEntitiesToNewPlayerInterpreter();
 
 		public bool ValidOnClient => true;
 		public bool ValidOnServer => false;

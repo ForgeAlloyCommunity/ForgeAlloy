@@ -7,7 +7,7 @@ namespace Forge.Networking.Unity.Messages.Interpreters
 {
 	public class MapLoadResponseInterpreter : IMessageInterpreter
 	{
-		public static MapLoadResponseInterpreter Instance { get; private set; } = new MapLoadResponseInterpreter();
+		public static MapLoadResponseInterpreter Instance { get; set; } = new MapLoadResponseInterpreter();
 
 		public bool ValidOnClient => true;
 		public bool ValidOnServer => false;

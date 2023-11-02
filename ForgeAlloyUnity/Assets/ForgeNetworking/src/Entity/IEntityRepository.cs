@@ -12,5 +12,7 @@ namespace Forge.Networking.Unity
 		IEnumerator<IUnityEntity> GetEnumerator();
 		bool Exists(int id);
 		bool Exists(IUnityEntity e);
-	}
+		bool RenameEntity(int fromId, int toId);
+
+    }
 }

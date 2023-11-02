@@ -115,6 +115,12 @@ namespace Forge.Networking.Messaging
 
 			return poolStats;
 		}
+
+		public void Clear()
+		{
+			_messagePools.Clear();
+			_poolSize.Clear();
+		}
 	}
 
 	public class PoolStats

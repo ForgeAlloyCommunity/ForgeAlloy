@@ -9,8 +9,8 @@ namespace Forge.Networking.Unity
 {
 	public class NetworkEntity : MonoBehaviour, IUnityEntity
 	{
-		[SerializeField] private string _sceneIdentifier = null;
-		[SerializeField, HideInInspector] private int _sceneIndex = 0;
+		[SerializeField] protected string _sceneIdentifier = null;
+		[SerializeField, HideInInspector] protected int _sceneIndex = 0;
 		public int Id { get; set; }
 		public int PrefabId { get; set; }
 		public GameObject OwnerGameObject => gameObject;
@@ -22,10 +22,22 @@ namespace Forge.Networking.Unity
 		}
 
 		private IEngineFacade _engine;
+        public virtual void Reset()
+        {
+            _sceneIdentifier= null;
+            _sceneIndex= 0;
+            Id = 0;
+        }
+
+        public virtual void Load()
+        {
+            _sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        }
 
 		private void Awake()
 		{
-			_sceneIndex = SceneManager.GetActiveScene().buildIndex;
+			Load();
 		}
 
 		private void Start()

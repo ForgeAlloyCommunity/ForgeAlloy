@@ -41,6 +41,17 @@ namespace Forge.Networking.Unity
 			return _entities.ContainsKey(id);
 		}
 
+		public bool RenameEntity(int fromId, int toId)
+		{
+			if (!Exists(fromId)) return false;
+
+			var e = Get(fromId);
+			Remove(fromId);
+			e.Id= toId;
+			Add(e);
+			return true;
+		}
+
 		public bool Exists(IUnityEntity e)
 		{
 			foreach (var kv in _entities)

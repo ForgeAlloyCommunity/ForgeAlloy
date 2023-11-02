@@ -9,7 +9,7 @@ namespace Forge.ServerRegistry.Messaging.Messages
 	[ServerListingMessageContract(3, typeof(ForgeServerRegistryMessage))]
 	public class ForgeServerRegistryMessage : ForgeMessage
 	{
-		public ServerListingEntry[] Entries { get; set; }
+		public ServerListingEntry[] Entries { get; set; } = new ServerListingEntry[0];
 		public override IMessageInterpreter Interpreter =>
 			AbstractFactory.Get<INetworkTypeFactory>().GetNew<IServerRegistryInterpreter>();
 
