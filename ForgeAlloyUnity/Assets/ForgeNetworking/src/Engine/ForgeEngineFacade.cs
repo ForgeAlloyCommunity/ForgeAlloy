@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Forge.Engine;
 using Forge.Factory;
 using Forge.Networking.Messaging;
@@ -18,9 +18,13 @@ namespace Forge.Networking.Unity
 		[SerializeField]
 		private string _sceneToDisconnectTo = "";
 
-		public string CurrentMap => _sceneToLoad;
-
-		private int _currentEntityId = 0;
+       // public string CurrentMap => _sceneToLoad;
+        public string CurrentMap
+        {
+            get => _sceneToLoad;
+            set => _sceneToLoad = value; // Add this setter
+        }
+        private int _currentEntityId = 0;
 
 		public INetworkMediator NetworkMediator { get; set; }
 		private ISocketFacade _selfSocket => NetworkMediator.SocketFacade;
