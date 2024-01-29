@@ -18,7 +18,11 @@ namespace Forge.Networking.Unity
 		[SerializeField]
 		private string _sceneToDisconnectTo = "";
 
-		public string CurrentMap => _sceneToLoad;
+		public string CurrentMap
+    {
+        get => _sceneToLoad;
+        set => _sceneToLoad = value; // Add this setter
+    }
 
 		private int _currentEntityId = 0;
 
